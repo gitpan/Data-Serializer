@@ -4,7 +4,7 @@ BEGIN { @Data::Serializer::Data::Dumper::ISA = qw(Data::Serializer) }
 
 use strict;
 use Carp;
-use Data::Dumper '2.08';                # Backward compatibility
+use Data::Dumper; 
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
@@ -18,7 +18,7 @@ require AutoLoader;
 @EXPORT = qw(
 	
 );
-$VERSION = '0.01';
+$VERSION = '0.03';
 
 
 # Preloaded methods go here.
@@ -74,7 +74,9 @@ sub serialize {
     local $Data::Dumper::Indent = 0;
     local $Data::Dumper::Purity = 1;
     local $Data::Dumper::Terse = 1;
-    return Data::Dumper::Dumper($val);
+    #return Data::Dumper::Dumper($val);
+    #Eval'ing this statement will leave $M defined
+    return Data::Dumper->Dump([$val],['M']);
 }
 
 
@@ -82,12 +84,16 @@ sub serialize {
 # If the value is undefined or does not begin with our magic key string,
 # return it as-is. Otherwise, we need to recover the underlying data structure.
 #
+# Shamelessly copied from Data::Dumper::Serializer::Data::Dumper
+#	With apologies to relevant parties for not getting the 
+#	self-referencing right the first time
+#
+
 sub deserialize {
     my $self = shift;
     my ($val) = @_;
     return undef unless defined $val;
     my $M = "";
-#    ($val) = $val =~ /^(.*)$/s if $self->{'removetaint'};
     # Disambiguate hashref (perl may treat it as a block)
     my $N = eval($val =~ /^\{/ ? '+'.$val : $val);
     return $M ? $M : $N unless $@;

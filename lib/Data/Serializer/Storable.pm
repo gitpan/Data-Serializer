@@ -16,7 +16,7 @@ require AutoLoader;
 @EXPORT = qw(
 	
 );
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 
 # Preloaded methods go here.
@@ -58,8 +58,14 @@ perl(1), Data::Serializer(3), Data::Dumper(3).
 # Serialize a reference to supplied value
 #
 sub serialize {
-    my $ret = Storable::freeze($_[1]);            # Does not care whether portable
-    defined($ret) ? $ret : undef;
+	my $self = $_[0];
+	my $ret;
+	if ($self->{portable}) {
+		$ret = Storable::nfreeze($_[1]);
+	} else {
+		$ret = Storable::freeze($_[1]);
+	}
+	defined($ret) ? $ret : undef;
 }
 
 #
@@ -69,14 +75,3 @@ sub deserialize {
     my $ret = Storable::thaw($_[1]);            # Does not care whether portable
     defined($ret) ? $ret : undef;
 }
-
-#
-# Change dump method when portability is requested
-#
-sub DumpMeth {
-    my $self = shift;
-    $self->{'_dumpsub_'} = 
-      ($_[0] && $_[0] eq 'portable' ? \&Storable::nfreeze : \&Storable::freeze);
-    $self->_attrib('dumpmeth', @_);
-}
-

@@ -31,8 +31,10 @@ $object_package = 'My::TestObj';
                 simplescalar  => 1,
                 simplearray   => 1,
                 complexarray  => 2,
+                selfrefarray   => 1,
                 simplehash    => 1,
                 complexhash   => 3,
+                selfrefhash   => 1,
            );
 
 
@@ -45,7 +47,10 @@ $object_package = 'My::TestObj';
 
    simplearray   => [qw ( one two three ) ],
 
+
    complexarray  => ['one', {alpha => 1, beta => 2},['bob','dole']],
+
+   selfrefarray  => ['one', {alpha => 1, beta => 2},['bob','dole']],
 
    complexhash   => {
 			apple  => [qw ( one two three ) ],
@@ -58,7 +63,14 @@ $object_package = 'My::TestObj';
 				monkey => 3,
 			 	  },
 		 },
+   selfrefhash   => {
+			apple  => [qw ( one two three ) ],
+		 },
 	);
+
+$testrefs{selfrefhash}->{pear}   = $testrefs{selfrefhash}->{apple};
+
+$testrefs{selfrefarray}->[3]   = $testrefs{selfrefarray}->[1];
 
 %serializers = (
                         'Data::Dumper'  => {
@@ -66,72 +78,90 @@ $object_package = 'My::TestObj';
                                                 simplescalar  => $counts{simplescalar},
                                                 simplearray  => $counts{simplearray},
                                                 complexarray => $counts{complexarray},
+                                                selfrefarray  => $counts{selfrefarray},
                                                 simplehash   => $counts{simplehash},
                                                 complexhash  => $counts{complexhash},
+                                                selfrefhash  => $counts{selfrefhash},
                                            },
                         'Data::Denter'  => {
                                                 simpleobject  => $counts{simpleobject},
                                                 simplescalar  => $counts{simplescalar},
                                                 simplearray  => $counts{simplearray},
                                                 complexarray => $counts{complexarray},
+                                                selfrefarray  => $counts{selfrefarray},
                                                 simplehash   => $counts{simplehash},
                                                 complexhash  => $counts{complexhash},
+                                                selfrefhash  => $counts{selfrefhash},
                                            },
                         'Storable'      => {
                                                 simpleobject  => $counts{simpleobject},
                                                 simplescalar  => $counts{simplescalar},
                                                 simplearray  => $counts{simplearray},
                                                 complexarray => $counts{complexarray},
+                                                selfrefarray  => $counts{selfrefarray},
                                                 simplehash   => $counts{simplehash},
                                                 complexhash  => $counts{complexhash},
+                                                selfrefhash  => $counts{selfrefhash},
                                            },
                         'FreezeThaw'    => {
                                                 simpleobject  => $counts{simpleobject},
                                                 simplescalar  => $counts{simplescalar},
                                                 simplearray  => $counts{simplearray},
                                                 complexarray => $counts{complexarray},
+                                                selfrefarray  => $counts{selfrefarray},
                                                 simplehash   => $counts{simplehash},
                                                 complexhash  => $counts{complexhash},
+                                                selfrefhash  => $counts{selfrefhash},
                                            },
                         'Config::General' => {
                                                 simpleobject  => 0,
                                                 simplescalar  => 0,
                                                 simplearray  => 0,
                                                 complexarray => 0,
+                                                selfrefarray  => 0,
                                                 simplehash   => $counts{simplehash},
                                                 complexhash  => $counts{complexhash},
+                                                selfrefhash  => $counts{selfrefhash},
                                            },
                         'YAML'  => {
                                                 simpleobject  => $counts{simpleobject},
                                                 simplescalar  => $counts{simplescalar},
                                                 simplearray  => $counts{simplearray},
                                                 complexarray => $counts{complexarray},
+                                                selfrefarray  => $counts{selfrefarray},
                                                 simplehash   => $counts{simplehash},
                                                 complexhash  => $counts{complexhash},
+                                                selfrefhash  => $counts{selfrefhash},
                                            },
                         'XML::Dumper'   => {
                                                 simpleobject  => $counts{simpleobject},
                                                 simplescalar  => $counts{simplescalar},
                                                 simplearray  => $counts{simplearray},
                                                 complexarray => $counts{complexarray},
+                                                selfrefarray  => $counts{selfrefarray},
                                                 simplehash   => $counts{simplehash},
                                                 complexhash  => $counts{complexhash},
+                                                selfrefhash  => $counts{selfrefhash},
                                            },
                         'XML::Simple'   => {
                                                 simpleobject  => 0,
                                                 simplescalar  => 0,
                                                 simplearray  => $counts{simplearray},
                                                 complexarray => $counts{complexarray},
+                                                selfrefarray  => $counts{selfrefarray},
                                                 simplehash   => $counts{simplehash},
                                                 complexhash  => $counts{complexhash},
+                                                selfrefhash  => $counts{selfrefhash},
                                            },
                         'PHP::Serialization'    => {
                                                 simpleobject  => 0,
                                                 simplescalar  => 0,
                                                 simplearray  => $counts{simplearray},
                                                 complexarray => $counts{complexarray},
+                                                selfrefarray  => $counts{selfrefarray},
                                                 simplehash   => $counts{simplehash},
                                                 complexhash  => $counts{complexhash},
+                                                selfrefhash  => $counts{selfrefhash},
                                            },
                   );
 
@@ -221,6 +251,10 @@ sub run_test {
                 $T->ok_eq($testrefs{$test}->{apple}->[1], $thawed->{apple}->[1],'hash of arrays');
                 $T->ok_eqnum($testrefs{$test}->{orange}->{alpha}, $thawed->{orange}->{alpha},'hash of hashes');
                 $T->ok_eq($testrefs{$test}->{pear}->{chain}->{hippie}, $thawed->{pear}->{chain}->{hippie},'hash of hash of hashes');
+        } elsif ($test eq 'selfrefhash') {
+                $T->ok_eq($testrefs{$test}->{apple}->[1], $thawed->{pear}->[1],'hash self ref to internal array');
+        } elsif ($test eq 'selfrefarray') {
+                $T->ok_eq($testrefs{$test}->[1]->{alpha}, $thawed->[3]->{alpha},'array self ref to internal array');
         }
 }
 

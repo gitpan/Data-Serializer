@@ -1,5 +1,25 @@
 Revision history for Perl extension Data::Serializer
 
+0.26  Fri Dec 03 11:49:34 MST 2004
+	- Modified Data::Serializer::Data::Dumper 
+	  removed the '2.08' requirement from use statement, this is handled in
+	  the Makefile.PL so was redundant anyway.  Was causing problems with
+	  build in perl 5.8.6
+	    Thanks to Ian <ian@holsman.net>
+
+      Tue Oct 05 15:30:02 MST 2004
+	- Modified Data::Serializer::Storable to use nfreeze when 
+	  the portable flag is set.  This should help make the use of Storable 
+	  within Data::Serializer actually be portable when you ask it to be.
+	    Thanks to Nick Edwards <nicke@summerleaze.co.uk> for requesting the feature
+
+	-Modified Data::Serializer::Data::Dumper to handle self-references correctly.
+	 Was not correctly handling the serializing of self-referencing data structures.
+	  
+	   Thanks to Ticha <ticha@openelement.co.uk> for finding the bug, and to
+	   Gurusamy Sarathy <gsar@ActiveState.com> (Data::Dumper author) for suggesting
+	   the fix. 
+
 0.25  Sat Jun 01 06:38:13 MST 2004
 	- Fixed misbehaving sloppy reference passing in test harness.
 	  (Bug only visible in win32)  
