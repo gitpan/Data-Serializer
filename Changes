@@ -1,5 +1,13 @@
 Revision history for Perl extension Data::Serializer
 
+0.27  Mon Dec 06 08:51:53 MST 2004
+	- Fixed version bug in test suite
+	  Routine in test suite that tested storing to open filehandles was
+	  using open() in a fashion incompatible with earlier versions of perl.
+	  Converted it to use IO::File instead.
+	    Thanks to the cpan testers for catching this one, in particular
+	      nothingmuch@woobling.org
+
 0.26  Fri Dec 03 11:49:34 MST 2004
 	- Modified Data::Serializer::Data::Dumper 
 	  removed the '2.08' requirement from use statement, this is handled in
