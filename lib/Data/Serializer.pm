@@ -17,7 +17,7 @@ require AutoLoader;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.28';
+$VERSION = '0.29';
 
 # Preloaded methods go here.
 {
@@ -39,7 +39,7 @@ $VERSION = '0.28';
     my ($class, %args) = @_;
     my $dataref = {%_fields};
     foreach my $field (keys %_fields) {
-      $dataref->{$field} = $args{$field} if defined $args{$field};
+      $dataref->{$field} = $args{$field} if exists $args{$field};
     }
 
     $dataref->{_key} = rand
@@ -669,8 +669,8 @@ sub serialize {
     $encoding = $self->encoding;
     $value = $self->_encode($value);
   }
-  my $token = $self->_create_token($serializer,$cipher, $digester,$encoding,$compressor);
   if ($self->serializer_token) {
+    my $token = $self->_create_token($serializer,$cipher, $digester,$encoding,$compressor);
     $value = $token . $value;
   }
   return $value;
@@ -724,13 +724,12 @@ sub raw_serialize {
   my $self = (shift);
   my $serializer = $self->serializer;
   return $self->_serialize(\@_,$serializer);
-  return $value;
 }
 
 sub _encode {
   my $self = (shift);
   my $value = (shift);
-  $encoding = $self->encoding;
+  my $encoding = $self->encoding;
   if ($encoding eq 'hex') {
     return $self->_enhex($value);
   } elsif ($encoding eq 'b64') {
@@ -767,15 +766,19 @@ sub deserialize {
   my $value = (shift);
   my $token = $self->_get_token($value);
   my ($serializer,$cipher, $digester,$encoding, $compressor); 
+  my $compress = $self->compress;
   if (defined $token) {
     ($serializer,$cipher, $digester,$encoding, $compressor) = $self->_extract_token($token); 
+
+    #if compressor is defined and has a value then we must decompress it
+    $compress = 1 if ($compressor);
     $value = $self->_remove_token($value);
   } else {
     $serializer = $self->serializer;
     $cipher = $self->cipher;
     $digester = $self->digester;
     $compressor = $self->compressor;
-    if (defined $self->portable) {
+    if ($self->portable) {
       $encoding = $self->encoding;
     }
   }
@@ -785,7 +788,7 @@ sub deserialize {
   if (defined $self->secret) {
     $value = $self->_decrypt($value,$cipher,$digester);
   }
-  if (defined $compressor) {
+  if ($compress) {
     $value = $self->_decompress($value);
   }
   #we always deserialize no matter what.

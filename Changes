@@ -1,12 +1,25 @@
 Revision history for Perl extension Data::Serializer
 
+0.29  Mon Feb 07 18:42:14 MDT 2005
+	- Modified constructor to test exists rather then defined allowing 
+	  features to be disabled in the constructor.
+	- Modified deserialize to check if values are true, not just defined 
+		to enable features also fixed a bug in deserialize for tokenless 
+		deserializations where compressor was checked instead of 
+		compress to determine if the data needed to be decompressed
+	- Cleaned up a couple bugs that prevented it from compiling when 
+		autosplit was disabled
+
+		Thanks to John Alden <john.alden@bbc.co.uk> for detailed bug reports, 
+		and excellent recommendations.
+
 0.28  Mon Dec 06 13:08:42 MST 2004
 	- Test qw compatibility bug in older perl versions fixed:
 	  From the 5.6 perldelta:
 		The qw// operator is now evaluated at compile time into a true 
 		list instead of being replaced with a run time call to split(). 
-		This removes the confusing misbehaviour of qw// in scalar context, 
-		which had inherited that behaviour from split().
+		This removes the confusing misbehavior of qw// in scalar context, 
+		which had inherited that behavior from split().
 
 	  To keep the module compatible with older version of perl the test was
 	  changed to explicitly return a list and thus circumvent this limitation
@@ -82,12 +95,12 @@ Revision history for Perl extension Data::Serializer
 	- Improved test suite to test combination of features
 	- cleaned up bug in handing of 'non-portable' serialized data
 
-0.19  Fri Feb 13 14:46:30 SDT 2004
+0.19  Fri Feb 13 14:46:30 MDT 2004
 	- Modified makefile to include dependancy on Digest::SHA1
 		Thanks (again) to Florian Helmberger <fh@laudatio.com>
                   for finding this discrepancy.
 
-0.18  Fri Feb 13 11:17:24 SDT 2004
+0.18  Fri Feb 13 11:17:24 MDT 2004
 	- Added support for MIME::Base64 for 'ascii armoring' serialized
 	  data.
 	- Minor modifications to pod documentation

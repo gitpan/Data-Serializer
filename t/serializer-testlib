@@ -169,6 +169,7 @@ $testrefs{selfrefarray}->[3]   = $testrefs{selfrefarray}->[1];
 
 %features = (
                 'raw'     	 => [],
+                'rawnew'     	 => [],
                 'non-portable'   => [],
                 'basic'     	 => [],
                 'cgopt'     	 => [],
@@ -221,6 +222,16 @@ sub run_test {
         if (grep {/raw/} $features) {
           $frozen = $obj->raw_serialize($testrefs{$test});
           $thawed = $obj->raw_deserialize($frozen);
+        } elsif (grep {/rawnew/} $features) {
+          my $newobj = Data::Serializer->new(
+					serializer=>$serializer,
+					portable=>undef,
+					serializer_token=>undef,
+						);
+          $frozen = $obj->serialize($testrefs{$test});
+          $thawed = $obj->deserialize($frozen);
+	
+	  
         } elsif (grep {/fh-storage/} $features) {
     	  my $fh = IO::File->new($file_path, O_CREAT|O_WRONLY, 0600);
           $obj->store($testrefs{$test},$fh);
