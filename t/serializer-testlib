@@ -1,5 +1,9 @@
 package My::TestObj;
 
+#Need to play nice on different Filesystems!
+
+use File::Spec;
+my $file_path = File::Spec->catfile('t', 'datastore.txt');
 
 sub new {
   my $class = (shift);
@@ -186,15 +190,17 @@ sub run_test {
           $frozen = $obj->raw_serialize($testrefs{$test});
           $thawed = $obj->raw_deserialize($frozen);
         } elsif (grep {/fh-storage/} $features) {
-	  open(FH, '>', './t/datastore.txt'); 
+	  open(FH, '>', $file_path); 
           $obj->store($testrefs{$test},*FH);
           close(FH);
-	  open(FH, '<', './t/datastore.txt'); 
+	  open(FH, '<', $file_path); 
           $thawed = $obj->retrieve(*FH);
           close(FH);
+          unlink($file_path);
         } elsif (grep {/storage/} $features) {
-          $obj->store($testrefs{$test},'./t/datastore.txt');
-          $thawed = $obj->retrieve('./t/datastore.txt');
+          $obj->store($testrefs{$test},$file_path);
+          $thawed = $obj->retrieve($file_path);
+          unlink($file_path);
         } else {
           $frozen = $obj->serialize($testrefs{$test});
           $thawed = $obj->deserialize($frozen);
