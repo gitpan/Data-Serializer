@@ -16,7 +16,7 @@ require AutoLoader;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.07';
+$VERSION = '0.08';
 
 
 # Preloaded methods go here.
@@ -440,6 +440,7 @@ sub _dedigest {
   my $digester = (shift);
   $self->_module_loader('Digest');	
   my ($old_digest) = $input =~ /^([^=]+?)=/;
+  return undef unless (defined $old_digest);
   $input =~ s/^$old_digest=//;
   my $new_digest = $self->_get_digest($input,$digester);
   return undef unless ($new_digest eq $old_digest);
@@ -449,7 +450,7 @@ sub _get_digest {
   my $self = (shift);
   my $input = (shift);
   my $digester = (shift);
-  my $ctx = Digest->$digester;
+  my $ctx = Digest->$digester();
   $ctx->add($input);
   return $ctx->hexdigest;
 }
