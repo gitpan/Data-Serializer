@@ -13,7 +13,7 @@ my $T = typical ExtUtils::TBone;                 # standard log
 	
 my @serializers;
 
-foreach my $serializer qw(Config::General) {
+foreach my $serializer (qw(Config::General)) {
 	if (eval "require $serializer") {
 		$T->msg("Found serializer $serializer");  
 		push(@serializers, $serializer);

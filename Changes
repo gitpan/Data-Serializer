@@ -1,5 +1,19 @@
 Revision history for Perl extension Data::Serializer
 
+0.28  Mon Dec 06 13:08:42 MST 2004
+	- Test qw compatibility bug in older perl versions fixed:
+	  From the 5.6 perldelta:
+		The qw// operator is now evaluated at compile time into a true 
+		list instead of being replaced with a run time call to split(). 
+		This removes the confusing misbehaviour of qw// in scalar context, 
+		which had inherited that behaviour from split().
+
+	  To keep the module compatible with older version of perl the test was
+	  changed to explicitly return a list and thus circumvent this limitation
+	  of qw in older versions of perl.	
+	    Thanks to nothingmuch@woobling.org for having multiple perl versions in 
+	    the cpan testers results to make finding the compatibility problem possible.
+
 0.27  Mon Dec 06 08:51:53 MST 2004
 	- Fixed version bug in test suite
 	  Routine in test suite that tested storing to open filehandles was

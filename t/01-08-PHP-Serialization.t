@@ -13,7 +13,7 @@ my $T = typical ExtUtils::TBone;                 # standard log
 	
 my @serializers;
 
-foreach my $serializer qw(PHP::Serialization) {
+foreach my $serializer (qw(PHP::Serialization)) {
 	if (eval "require $serializer") {
 		$T->msg("Found serializer $serializer");  
 		push(@serializers, $serializer);
