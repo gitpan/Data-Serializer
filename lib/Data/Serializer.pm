@@ -16,7 +16,7 @@ require AutoLoader;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.16';
+$VERSION = '0.17';
 
 
 # Preloaded methods go here.
@@ -326,7 +326,7 @@ Compresses serialized data.  Default is not to use it.
 
 =item B<serializer> - change the serializer
 
-Currently have 5 supported serializers: Storable, FreezeThaw Data::Denter Config::General and Data::Dumper.
+Currently have 6 supported serializers: Storable, FreezeThaw, Data::Denter, Config::General, YAML and Data::Dumper.
 Default is to use Data::Dumper.
 
 Each serializer has its own caveat's about usage especially when dealing with
@@ -400,7 +400,7 @@ and/or modify it under the same terms as Perl itself.
 
 =head1 SEE ALSO
 
-perl(1), Data::Dumper(3), Data::Denter(3), Storable(3), FreezeThaw(3), Config::General(3), MLDBM(3), Tie::Transient(3).
+perl(1), Data::Dumper(3), Data::Denter(3), Storable(3), FreezeThaw(3), Config::General(3), YAML(3), MLDBM(3), Tie::Transient(3).
 
 =cut
 

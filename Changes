@@ -1,5 +1,11 @@
 Revision history for Perl extension Data::Serializer
 
+0.17  Thu Jul 11 15:10:41 MDT 2002
+	- Added support for YAML as a new serializer
+
+		Thanks to Florian Helmberger <fhe@inode.at> for writing 
+		  the relevant patch to do this.
+
 0.16  Tue Jul  9 08:33:46 MDT 2002
 	- Added support for Config::General as a new serializer
  	- Added method 'options' for passing arguments to underlying serializers

@@ -40,21 +40,21 @@ METHODS
 
         new is the constructor object for Data::Serializer objects.
 
-        *   The default *serializer* is "Data::Dumper"
+            The default *serializer* is `Data::Dumper'
 
-        *   The default *digester* is "SHA1"
+            The default *digester* is `SHA1'
 
-        *   The default *cipher* is "Blowfish"
+            The default *cipher* is `Blowfish'
 
-        *   The default *secret* is "undef"
+            The default *secret* is `undef'
 
-        *   The default *portable* is 1
+            The default *portable* is `1'
 
-        *   The default *compress* is 0
+            The default *compress* is `0'
 
-        *   The default *serializer_token* is 1
+            The default *serializer_token* is `1'
 
-        *   The default *options* is "{}" (pass nothing on to serializer)
+            The default *options* is `{}' (pass nothing on to serializer)
 
     serialize - serialize reference
           $serialized = $obj->serialize({a => [1,2,3],b => 5});
@@ -91,9 +91,9 @@ METHODS
         Compresses serialized data. Default is not to use it.
 
     serializer - change the serializer
-        Currently have 5 supported serializers: Storable, FreezeThaw
-        Data::Denter Config::General and Data::Dumper. Default is to use
-        Data::Dumper.
+        Currently have 6 supported serializers: Storable, FreezeThaw,
+        Data::Denter, Config::General, YAML and Data::Dumper. Default is to
+        use Data::Dumper.
 
         Each serializer has its own caveat's about usage especially when
         dealing with cyclical data structures or CODE references. Please see
@@ -157,5 +157,5 @@ COPYRIGHT
 
 SEE ALSO
     perl(1), Data::Dumper(3), Data::Denter(3), Storable(3), FreezeThaw(3),
-    Config::General(3), MLDBM(3), Tie::Transient(3).
+    Config::General(3), YAML(3), MLDBM(3), Tie::Transient(3).
 

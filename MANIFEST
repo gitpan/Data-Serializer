@@ -9,5 +9,6 @@ lib/Data/Serializer/FreezeThaw.pm
 lib/Data/Serializer/Data/Dumper.pm
 lib/Data/Serializer/Data/Denter.pm
 lib/Data/Serializer/Config/General.pm
+lib/Data/Serializer/YAML.pm
 t/ExtUtils/TBone.pm
 t/main.t

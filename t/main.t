@@ -60,6 +60,12 @@ my %serializers = (
 						simplehash   => 1,
 						complexhash  => 3,
 					   },
+			'YAML'	=> {
+						simplearray  => 1,
+						complexarray => 2,
+						simplehash   => 1,
+						complexhash  => 3,
+					   },
 		  );
 my %features = (
 		'encryption' 	 => [qw (Crypt::CBC Crypt::Blowfish)],
