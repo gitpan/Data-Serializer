@@ -70,6 +70,7 @@ my %serializers = (
 my %features = (
 		'encryption' 	 => [qw (Crypt::CBC Crypt::Blowfish)],
 		'compression' 	 => [qw (Compress::Zlib)],
+		'encoding' 	 => [qw (MIME::Base64)],
 		'transience' 	 => [qw (Tie::Transient)],
 		);
 
@@ -137,6 +138,9 @@ sub run_test {
 	} elsif ($feature eq 'compression') {
 		# use compression (Compress::Zlib)
 		$obj->compress(1);
+	} elsif ($feature eq 'encoding') {
+		# test alternate encoding
+		$obj->encoding('b64');
 	} elsif ($feature eq 'transience') {
 		$T->msg("Transience not really tested, this is a place holder");  # message for the log
 	}

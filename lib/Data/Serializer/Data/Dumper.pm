@@ -3,7 +3,6 @@ BEGIN { @Data::Serializer::Data::Dumper::ISA = qw(Data::Serializer) }
 
 
 use strict;
-
 use Carp;
 use Data::Dumper '2.08';                # Backward compatibility
 

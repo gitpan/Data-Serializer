@@ -12,3 +12,4 @@ lib/Data/Serializer/Config/General.pm
 lib/Data/Serializer/YAML.pm
 t/ExtUtils/TBone.pm
 t/main.t
+META.yml                                 Module meta-data (added by MakeMaker)

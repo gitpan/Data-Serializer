@@ -40,21 +40,23 @@ METHODS
 
         new is the constructor object for Data::Serializer objects.
 
-            The default *serializer* is `Data::Dumper'
+        *   The default *serializer* is "Data::Dumper"
 
-            The default *digester* is `SHA1'
+        *   The default *digester* is "SHA1"
 
-            The default *cipher* is `Blowfish'
+        *   The default *cipher* is "Blowfish"
 
-            The default *secret* is `undef'
+        *   The default *secret* is "undef"
 
-            The default *portable* is `1'
+        *   The default *portable* is 1
 
-            The default *compress* is `0'
+        *   The default *encoding* is "hex"
 
-            The default *serializer_token* is `1'
+        *   The default *compress* is 0
 
-            The default *options* is `{}' (pass nothing on to serializer)
+        *   The default *serializer_token* is 1
+
+        *   The default *options* is "{}" (pass nothing on to serializer)
 
     serialize - serialize reference
           $serialized = $obj->serialize({a => [1,2,3],b => 5});
@@ -84,7 +86,9 @@ METHODS
         be set in the constructor. If specified than the object will utilize
         encryption.
 
-    portable - hex encodes/decodes serialized data
+    portable - encodes/decodes serialized data
+        Uses encoding method to ascii armor serialized data
+
         Aids in the portability of serialized data.
 
     compress - compression of data
@@ -108,6 +112,13 @@ METHODS
         Uses Digest so can support any digesting method that it supports.
         Digesting function is used internally by the encryption routine as
         part of data verification.
+
+    encoding - change encoding method
+        Encodes data structure in ascii friendly manner. Currently the only
+        valid options are hex, or b64.
+
+        The b64 option uses Base64 encoding provided by MIME::Base64, but
+        strips out newlines.
 
     serializer_token - add usage hint to data
         Data::Serializer prepends a token that identifies what was used to
@@ -133,29 +144,39 @@ TRANSIENCE
     use Tie::Transient as normal, and when your object is serialized, the
     transient components will be automatically removed for you.
 
-    Thanks to Brian Moseley <bcm@maz.org> for the Tie::Transient module, and
-    recomendations on how to integrate it into Data::Serializer.
+    Tie::Transient is not on CPAN, and doesn't look like it ever will be.
+    With the advent of attributes from 5.8 this feature should probably be
+    deprecated anyway.
 
-    Tie::Transient is not yet on CPAN, but can be downloaded directly from
-    Brian's site here: http://www.maz.org/perl/Tie-Transient-0.05.tar.gz
+    If you would like to use Tie::Transient you can download it directly
+    from Brian's site here:
+    http://www.maz.org/perl/Tie-Transient-0.05.tar.gz
 
-TODO
-EXAMPLES
+    With perl attributes in 5.8, this should probably be deprecated.
+
 AUTHOR
     Neil Neely <neil@frii.net>.
 
-    Serializer code inspired heavily by the work of Gurusamy Sarathy and
-    Raphael Manfredi in the MLDBM module.
-
 COPYRIGHT
-    Copyright (c) 2001,2002 Front Range Internet, Inc.
+    Copyright (c) 2001-2004 Front Range Internet, Inc.
 
-    Copyright (c) 2001,2002 Neil Neely. All rights reserved.
+    Copyright (c) 2001-2004 Neil Neely. All rights reserved.
 
     This program is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself.
 
+ACKNOWLEDGEMENTS
+    Gurusamy Sarathy and Raphael Manfredi for writing MLDBM, the module
+    which inspired the creation of Data::Serializer.
+
+    And a thanks to all of you who have provided the feedback that has
+    improved this module over the years.
+
+    In particular I'd like to thank Florian Helmberger, for the numerous
+    suggestions and bug fixes.
+
 SEE ALSO
     perl(1), Data::Dumper(3), Data::Denter(3), Storable(3), FreezeThaw(3),
-    Config::General(3), YAML(3), MLDBM(3), Tie::Transient(3).
+    Config::General(3), YAML(3), MLDBM(3), Tie::Transient(3),
+    Compress::Zlib(3), Digest(3), Crypt(3), MIME::Base64(3).
 

@@ -16,7 +16,7 @@ require AutoLoader;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.17';
+$VERSION = '0.18';
 
 
 # Preloaded methods go here.
@@ -192,7 +192,6 @@ $VERSION = '0.17';
 
 
 # Autoload methods go after =cut, and are processed by the autosplit program.
-
 1;
 __END__
 #Documentation follows
@@ -272,6 +271,10 @@ The default I<portable> is C<1>
 
 =item
 
+The default I<encoding> is C<hex>
+
+=item
+
 The default I<compress> is C<0>
 
 =item
@@ -316,7 +319,9 @@ of the original serialized reference.
 Changes setting of secret for the Data::Serializer object.  Can also be set
 in the constructor.  If specified than the object will utilize encryption.
 
-=item B<portable> - hex encodes/decodes serialized data
+=item B<portable> - encodes/decodes serialized data
+
+Uses B<encoding> method to ascii armor serialized data
 
 Aids in the portability of serialized data. 
 
@@ -341,6 +346,13 @@ Utilizes Crypt::CBC and can support any cipher method that it supports.
 
 Uses Digest so can support any digesting method that it supports.  Digesting
 function is used internally by the encryption routine as part of data verification.
+
+=item B<encoding> - change encoding method
+
+Encodes data structure in ascii friendly manner.  Currently the only valid options
+are hex, or b64. 
+
+The b64 option uses Base64 encoding provided by MIME::Base64, but strips out newlines.
 
 =item B<serializer_token> - add usage hint to data
 
@@ -370,37 +382,44 @@ Data::Serializer is aware of Tie::Transient.  What this means is that you use
 Tie::Transient as normal, and when your object is serialized, the transient 
 components will be automatically removed for you.
 
-Thanks to Brian Moseley <bcm@maz.org> for the Tie::Transient module, and 
-recomendations on how to integrate it into Data::Serializer.
+Tie::Transient is not on CPAN, and doesn't look like it ever will be.  With
+the advent of attributes from 5.8 this feature should probably be deprecated
+anyway.
 
-Tie::Transient is not yet on CPAN, but can be downloaded directly from Brian's 
-site here:  http://www.maz.org/perl/Tie-Transient-0.05.tar.gz
+If you would like to use Tie::Transient you can download it directly 
+from Brian's site here:  http://www.maz.org/perl/Tie-Transient-0.05.tar.gz
 
-=head1 TODO
-
-=head1 EXAMPLES
+With perl attributes in 5.8, this should probably be deprecated.  
 
 =head1 AUTHOR
 
 Neil Neely <F<neil@frii.net>>.
 
-Serializer code inspired heavily by the work 
-of Gurusamy Sarathy and Raphael Manfredi in 
-the MLDBM module.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2001,2002 Front Range Internet, Inc.
+Copyright (c) 2001-2004 Front Range Internet, Inc.
 
-Copyright (c) 2001,2002 Neil Neely.  All rights reserved.
+Copyright (c) 2001-2004 Neil Neely.  All rights reserved.
 
 This program is free software; you can redistribute it
 and/or modify it under the same terms as Perl itself.
 
+=head1 ACKNOWLEDGEMENTS 
+
+Gurusamy Sarathy and Raphael Manfredi for writing MLDBM,
+the module which inspired the creation of Data::Serializer.
+
+And a thanks to all of you who have provided the feedback 
+that has improved this module over the years.
+
+In particular I'd like to thank Florian Helmberger, for the 
+numerous suggestions and bug fixes.
 
 =head1 SEE ALSO
 
-perl(1), Data::Dumper(3), Data::Denter(3), Storable(3), FreezeThaw(3), Config::General(3), YAML(3), MLDBM(3), Tie::Transient(3).
+perl(1), Data::Dumper(3), Data::Denter(3), Storable(3), FreezeThaw(3), Config::General(3), 
+YAML(3), MLDBM(3), Tie::Transient(3), Compress::Zlib(3), Digest(3), Crypt(3), MIME::Base64(3).
 
 =cut
 
@@ -514,6 +533,20 @@ sub _dehex {
   return (pack'H*',(shift));
 }
 
+sub _enb64 {
+  my $self = (shift);
+  $self->_module_loader('MIME::Base64');	
+  my $b64 = MIME::Base64::encode_base64( (shift), '' );
+  return $b64;
+}
+
+
+sub _deb64 {
+  my $self = (shift);
+  $self->_module_loader('MIME::Base64');	
+  return MIME::Base64::decode_base64( (shift) );
+}
+
 # do all 3 stages
 sub freeze { (shift)->serialize(@_); }
 sub thaw { (shift)->deserialize(@_); }
@@ -544,15 +577,39 @@ sub serialize {
   }
   if ($self->portable) {
     $encoding = $self->encoding;
-    if ($encoding eq 'hex') {
-      $value = $self->_enhex($value);
-    }
+    $value = $self->_encode($value);
   }
   my $token = $self->_create_token($serializer,$cipher, $digester,$encoding,$compressor);
   if ($self->serializer_token) {
     $value = $token . $value;
   }
   return $value;
+}
+
+sub _encode {
+  my $self = (shift);
+  my $value = (shift);
+  $encoding = $self->encoding;
+  if ($encoding eq 'hex') {
+    return $self->_enhex($value);
+  } elsif ($encoding eq 'b64') {
+    return $self->_enb64($value);
+  } else {
+    croak "Unknown encoding method $encoding\n";
+  }
+}
+
+sub _decode {
+  my $self = (shift);
+  my $value = (shift);
+  $encoding = $self->encoding;
+  if ($encoding eq 'hex') {
+    return $self->_dehex($value);
+  } elsif ($encoding eq 'b64') {
+    return $self->_deb64($value);
+  } else {
+    croak "Unknown encoding method $encoding\n";
+  }
 }
 
 sub deserialize {
@@ -573,9 +630,7 @@ sub deserialize {
     }
   }
   if (defined $encoding) {
-    if ($encoding eq 'hex') {
-      $value = $self->_dehex($value);
-    } 
+    $value = $self->_decode($value);
   } 
   if (defined $self->secret) {
     $value = $self->_decrypt($value,$cipher,$digester);
