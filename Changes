@@ -1,5 +1,11 @@
 Revision history for Perl extension Data::Serializer
 
+0.25  Sat Jun 01 06:38:13 MST 2004
+	- Fixed misbehaving sloppy reference passing in test harness.
+	  (Bug only visible in win32)  
+            Thanks to =?ISO-8859-1?Q?=22Murat_=DCnalan=22?= <muenalan@cpan.org>
+	    For debugging and providing the patch to get this to work.
+
 0.24  Sat May 29 14:22:42 MST 2004
 	- Fixed bug in new 08-Store-Retrieve.t test
 	    Now using File::Spec to correctly build path for test

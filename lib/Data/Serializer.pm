@@ -17,7 +17,7 @@ require AutoLoader;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.24';
+$VERSION = '0.25';
 
 # Preloaded methods go here.
 {
@@ -694,7 +694,8 @@ sub store {
     unless (defined $perm) {
       $perm = 0600;
     }
-    my $fh = new IO::File $file_or_fh, $mode,$perm || croak "Cannot write to $file_or_fh: $!";
+    my $fh = new IO::File; 
+    $fh->open($file_or_fh, $mode,$perm) || croak "Cannot write to $file_or_fh: $!";
     print $fh $self->serialize($data), "\n";
     $fh->close();
   }

@@ -191,10 +191,10 @@ sub run_test {
           $thawed = $obj->raw_deserialize($frozen);
         } elsif (grep {/fh-storage/} $features) {
 	  open(FH, '>', $file_path); 
-          $obj->store($testrefs{$test},*FH);
+          $obj->store($testrefs{$test},\*FH);
           close(FH);
 	  open(FH, '<', $file_path); 
-          $thawed = $obj->retrieve(*FH);
+          $thawed = $obj->retrieve(\*FH);
           close(FH);
           unlink($file_path);
         } elsif (grep {/storage/} $features) {
