@@ -16,7 +16,7 @@ require AutoLoader;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.11';
+$VERSION = '0.14';
 
 
 # Preloaded methods go here.
@@ -31,6 +31,7 @@ $VERSION = '0.11';
                   secret     => undef,
                   portable   => '1',
                   compress   => '0',
+                 transient   => '0',
             serializer_token => '1',
                 );
   sub new {
@@ -46,6 +47,7 @@ $VERSION = '0.11';
     $_internal{$dataref->{_key}} = $dataref;
     my $self = \$dataref->{_key};
     bless $self, $class;
+    $self->transient(1) if (eval "require Tie::Transient");
     
     #load serializer module if it is defined
     return $self;
@@ -114,6 +116,15 @@ $VERSION = '0.11';
     my $return = $_internal{$id}->{encoding};
     if (@_) {
       $_internal{$id}->{encoding} = (shift);
+    }
+    return $return;
+  }
+  sub transient {
+    my $self = (shift);
+    my $id = $$self;
+    my $return = $_internal{$id}->{transient};
+    if (@_) {
+      $_internal{$id}->{transient} = (shift);
     }
     return $return;
   }
@@ -258,7 +269,7 @@ The default I<serializer_token> is C<1>
 
 =back
 
-=item B<serialze> - serialize reference
+=item B<serialize> - serialize reference
 
   $serialized = $obj->serialize({a => [1,2,3],b => 5});
 
@@ -268,7 +279,7 @@ Will compress if compress is a true value.
 
 Will encrypt if secret is defined.
 
-=item B<deserialze> - deserialize reference
+=item B<deserialize> - deserialize reference
 
   $deserialized = $obj->deserialize($serialized);
 
@@ -298,7 +309,7 @@ Aids in the portability of serialized data.
 
 Compresses serialized data.  Default is not to use it.
 
-=item B<serialzer> - change the serializer
+=item B<serializer> - change the serializer
 
 Currently have 4 supported serializers: Storable, FreezeThaw Data::Denter and Data::Dumper.
 Default is to use Data::Dumper.
@@ -323,6 +334,15 @@ This is used internally to allow runtime determination of how to extract Seriali
 data.   Disabling this feature is not recommended.
 
 =back
+
+=head1 TRANSIENCE 
+
+Data::Serializer is aware of Tie::Transient.  What this means is that you use
+Tie::Transient as normal, and when your object is serialized, the transient 
+components will be automatically removed for you.
+
+Thanks to Brian Moseley <bcm@maz.org> for the Tie::Transient module, and 
+recomendations on how to integrate it into Data::Serializer.
 
 
 =head1 TODO
@@ -349,7 +369,7 @@ and/or modify it under the same terms as Perl itself.
 
 =head1 SEE ALSO
 
-perl(1), Data::Dumper(3), Data::Denter(3), Storable(3), FreezeThaw(3), MLDBM(3).
+perl(1), Data::Dumper(3), Data::Denter(3), Storable(3), FreezeThaw(3), MLDBM(3), Tie::Transient(3).
 
 =cut
 
@@ -475,7 +495,9 @@ sub serialize {
 
   #define serializer for token
   $serializer = $self->serializer;
+  &Tie::Transient::hide_transients() if ($self->transient());
   my $value = $self->_serialize(\@_,$serializer);
+  &Tie::Transient::show_transients() if ($self->transient());
 
   if ($self->compress) {
     $compressor = $self->compressor;
@@ -531,6 +553,9 @@ sub deserialize {
     $value = $self->_decompress($value);
   }
   #we always deserialize no matter what.
-  return $self->_deserialize($value,$serializer);
+  &Tie::Transient::show_transients() if ($self->transient());
+  my @return = $self->_deserialize($value,$serializer);
+  &Tie::Transient::hide_transients() if ($self->transient());
+  return wantarray ? @return : $return[0];
 }
 

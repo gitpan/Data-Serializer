@@ -1,4 +1,16 @@
 Revision history for Perl extension Data::Serializer
+
+0.14  Mon Jul  1 08:43:42 MDT 2002
+	- Corrected typo's in pod documentation
+          Thanks to Florian Helmberger <f.helmberger@uptime.at>
+
+0.13  Mon Jan 14 12:49:10 2002
+        - Added support for Tie::Transient
+            Thanks to recomendation from brian moseley <bcm@maz.org>)
+
+0.12  Mon Jan 14 12:23:28 2002
+        - Cleaned up installation tests
+
 0.11  Tue Jan  8 13:28:43 2002
         - Removed build dependencies for all but Data::Dumper
             (Thanks to recomendation from brian moseley <bcm@maz.org>)
