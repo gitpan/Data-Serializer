@@ -16,7 +16,7 @@ require AutoLoader;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.19';
+$VERSION = '0.20';
 
 
 # Preloaded methods go here.
@@ -602,11 +602,14 @@ sub _encode {
 sub _decode {
   my $self = (shift);
   my $value = (shift);
-  $encoding = $self->encoding;
+  my $encoding = (shift);
   if ($encoding eq 'hex') {
     return $self->_dehex($value);
   } elsif ($encoding eq 'b64') {
     return $self->_deb64($value);
+  } elsif ($encoding !~ /\S/) {
+    #quietly ignore empty encoding
+    return $value;
   } else {
     croak "Unknown encoding method $encoding\n";
   }
@@ -630,7 +633,7 @@ sub deserialize {
     }
   }
   if (defined $encoding) {
-    $value = $self->_decode($value);
+    $value = $self->_decode($value,$encoding);
   } 
   if (defined $self->secret) {
     $value = $self->_decrypt($value,$cipher,$digester);

@@ -71,7 +71,6 @@ my %features = (
 		'encryption' 	 => [qw (Crypt::CBC Crypt::Blowfish)],
 		'compression' 	 => [qw (Compress::Zlib)],
 		'encoding' 	 => [qw (MIME::Base64)],
-		'transience' 	 => [qw (Tie::Transient)],
 		);
 
 my @serializers;
@@ -95,6 +94,17 @@ while (my ($feature,$ref) =  each %features) {
 	$T->msg("Found feature $feature");  
 	push(@features, $feature);
 }
+my @feature_combos;
+push(@feature_combos, "non-portable encryption") if (grep {/^encryption$/} @features);
+push(@feature_combos, "non-portable compression") if (grep {/^compression$/} @features);
+if (grep {/^encryption$/} @features && grep {/^compression$/} @features) {
+  push(@feature_combos, "encryption compression");
+  push(@feature_combos, "non-portable encryption compression");
+} 
+push(@feature_combos, "encryption encoding") if (grep {/^encryption$/} @features && grep {/^encoding$/} @features);
+push(@feature_combos, "encoding compression") if (grep {/^encoding$/} @features && grep {/^compression$/} @features);
+push(@feature_combos, "encoding encryption compression") if (grep {/^encoding$/} @features && grep {/^encryption$/} @features && grep {/^compression$/} @features);
+
 my %tests;
 my $testcount;
 foreach my $serializer (@serializers) {
@@ -110,6 +120,10 @@ foreach my $serializer (@serializers) {
 			$testcount += $value;
 			$tests{$serializer}->{$test}->{$feature} = $value;
 		}
+		foreach my $feature_combo (@feature_combos) {
+			$testcount += $value;
+			$tests{$serializer}->{$test}->{$feature_combo} = $value;
+		}
         }
 }
 $T->begin($testcount);
@@ -117,32 +131,32 @@ $T->msg("Here come the tests");  # message for the log
 
 foreach my $serializer (keys %tests) {
 	foreach my $test (keys %{$tests{$serializer}}) {
-		foreach my $feature (keys %{$tests{$serializer}->{$test}}) {
-                  run_test($serializer,$test,$feature);
+		foreach my $features (keys %{$tests{$serializer}->{$test}}) {
+                  run_test($serializer,$test,$features);
 		}
 	}
 }
 sub run_test {
-	my ($serializer,$test,$feature) = @_;
-	$T->msg("Test $serializer $test $feature");  # message for the log
+	my ($serializer,$test,$features) = @_;
+	$T->msg("Test $serializer $test $features");  # message for the log
 	my $obj = Data::Serializer->new(serializer=>$serializer);
-	#basic encryption compression transience	
- 	if ($feature eq 'basic') {
-		#do nothing special
-	} elsif ($feature eq 'non-portable') {
-		#make sure we work without ascii armoring
-		$obj->portable(0);
-	} elsif ($feature eq 'encryption') {
-		#setup a secret so we use encryption on this run
-		$obj->secret('test');
-	} elsif ($feature eq 'compression') {
-		# use compression (Compress::Zlib)
-		$obj->compress(1);
-	} elsif ($feature eq 'encoding') {
-		# test alternate encoding
-		$obj->encoding('b64');
-	} elsif ($feature eq 'transience') {
-		$T->msg("Transience not really tested, this is a place holder");  # message for the log
+	#basic encryption compression 
+        foreach my $feature (split(" ", $features)) {
+   		if ($feature eq 'basic') {
+			#do nothing special
+		} elsif ($feature eq 'non-portable') {
+			#make sure we work without ascii armoring
+			$obj->portable(0);
+		} elsif ($feature eq 'encryption') {
+			#setup a secret so we use encryption on this run
+			$obj->secret('test');
+		} elsif ($feature eq 'compression') {
+			# use compression (Compress::Zlib)
+			$obj->compress(1);
+		} elsif ($feature eq 'encoding') {
+			# test alternate encoding
+			$obj->encoding('b64');
+		}
 	}
 	my $frozen = $obj->serialize($testrefs{$test});
 	my $thawed = $obj->deserialize($frozen);
