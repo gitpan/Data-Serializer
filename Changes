@@ -1,10 +1,11 @@
 Revision history for Perl extension Data::Serializer
 
-0.18  Fri Feb 13 11:17:24 MDT 2004
+0.19  Fri Feb 13 14:46:30 MDT 2004
 	- Modified makefile to include dependancy on Digest::SHA1
 		Thanks (again) to Florian Helmberger <fh@laudatio.com>
                   for finding this discrepancy.
 
+0.18  Fri Feb 13 11:17:24 MDT 2004
 	- Added support for MIME::Base64 for 'ascii armoring' serialized
 	  data.
 	- Minor modifications to pod documentation

@@ -16,7 +16,7 @@ require AutoLoader;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.18';
+$VERSION = '0.19';
 
 
 # Preloaded methods go here.
