@@ -1,4 +1,8 @@
 Revision history for Perl extension Data::Serializer
+0.11  Tue Jan  8 13:28:43 2002
+        - Removed build dependencies for all but Data::Dumper
+            (Thanks to recomendation from brian moseley <bcm@maz.org>)
+
 0.10  Mon Jan  7 13:00:24 2002
         - Added Support for Data::Denter
 
@@ -7,7 +11,8 @@ Revision history for Perl extension Data::Serializer
 
 0.08  Mon Oct 16 07:54:32 2001
 	- Fixed bug in digest verification 
-        - Fixed 5.005_03 compativility bug (thanks to Tatsuhiko Miyagawa <miyagawa@edge.co.jp>)
+        - Fixed 5.005_03 compativility bug 
+            (thanks to Tatsuhiko Miyagawa <miyagawa@edge.co.jp>)
 
 0.07  Wed Oct  5 11:42:20 2001
 	- changed token system to be more flexible

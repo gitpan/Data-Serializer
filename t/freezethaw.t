@@ -7,8 +7,8 @@ BEGIN { $|=1; $^W=1; }
 
 use strict;
 use Test;
-
-BEGIN { plan tests => 9 };
+my $tests;
+BEGIN { $tests = 9; plan tests => $tests };
 
 my $hashref = { alpha => 1,
 		beta  => 2 };
@@ -21,6 +21,13 @@ my $complexref = {
 			pear   => { chain => {hippie => 'smelly', donkey => 'worship'}, monkey => 3 },
 		 };
 # Load the socket module
+unless (eval "require $serializer") {
+  warn "$serializer not installed ... skipping\n";
+  foreach (1..$tests) {
+    skip("$serializer not installed: skipping","$serializer not installed: skipping");
+  }
+  exit;
+}
 use Data::Serializer; 
 
 # Create a serializer object

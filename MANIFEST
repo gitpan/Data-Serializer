@@ -8,7 +8,6 @@ lib/Data/Serializer/Storable.pm
 lib/Data/Serializer/FreezeThaw.pm
 lib/Data/Serializer/Data/Dumper.pm
 lib/Data/Serializer/Data/Denter.pm
-t/require.t
 t/storable.t
 t/freezethaw.t
 t/datadumper.t
