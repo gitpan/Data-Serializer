@@ -16,7 +16,7 @@ require AutoLoader;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.08';
+$VERSION = '0.10';
 
 
 # Preloaded methods go here.
@@ -166,7 +166,7 @@ $VERSION = '0.08';
 
 }
 
-#END of public functions, all following funcitons are for internal use only
+#END of public functions, all following functions are for internal use only
 
 
 
@@ -258,11 +258,11 @@ The default I<serializer_token> is C<1>
 
 =back
 
-=item B<serialze> - serialize referece
+=item B<serialze> - serialize reference
 
   $serialized = $obj->serialize({a => [1,2,3],b => 5});
 
-Serializes the reference sepecified.  
+Serializes the reference specified.  
 
 Will compress if compress is a true value.
 
@@ -300,10 +300,10 @@ Compresses serialized data.  Default is not to use it.
 
 =item B<serialzer> - change the serializer
 
-Currently have 3 supported serializers: Storable, FreezeThaw and Data::Dumper.
+Currently have 4 supported serializers: Storable, FreezeThaw Data::Denter and Data::Dumper.
 Default is to use Data::Dumper.
 
-Each serializer has its own caveat's about usage expecially when dealing with
+Each serializer has its own caveat's about usage especially when dealing with
 cyclical data structures or CODE references.  Please see the appropriate
 documentation in those modules for further information.
 
@@ -320,7 +320,7 @@ function is used internally by the encryption routine as part of data verificati
 
 Data::Serializer prepends a token that identifies what was used to process its data.
 This is used internally to allow runtime determination of how to extract Serialized
-data.   Disabling this feature is not recomended.
+data.   Disabling this feature is not recommended.
 
 =back
 
@@ -339,9 +339,9 @@ the MLDBM module.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2001 Front Range Internet, Inc.
+Copyright (c) 2001,2002 Front Range Internet, Inc.
 
-Copyright (c) 2001 Neil Neely.  All rights reserved.
+Copyright (c) 2001,2002 Neil Neely.  All rights reserved.
 
 This program is free software; you can redistribute it
 and/or modify it under the same terms as Perl itself.
@@ -349,7 +349,7 @@ and/or modify it under the same terms as Perl itself.
 
 =head1 SEE ALSO
 
-perl(1), Data::Dumper(3), Storable(3), FreezeThaw(3), MLDBM(3).
+perl(1), Data::Dumper(3), Data::Denter(3), Storable(3), FreezeThaw(3), MLDBM(3).
 
 =cut
 

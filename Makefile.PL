@@ -10,6 +10,7 @@ WriteMakefile(
 	                 	  'Storable' => 0,
 	                 	  'FreezeThaw' => 0,
 	                 	  'Data::Dumper' => 0,
+	                 	  'Data::Denter' => 0,
 	                 	  'Compress::Zlib' => 0,
 	                 	  'Crypt::CBC' => 0,
        	                	  'Digest'     => 0,

@@ -1,4 +1,9 @@
 Revision history for Perl extension Data::Serializer
+0.10  Mon Jan  7 13:00:24 2002
+        - Added Support for Data::Denter
+
+0.09  Fri Nov  2 08:14:07 2001
+	- Cleaned up documentation
 
 0.08  Mon Oct 16 07:54:32 2001
 	- Fixed bug in digest verification 

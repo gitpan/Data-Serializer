@@ -7,7 +7,7 @@ BEGIN { $|=1; $^W=1; }
 use strict;
 use Test;
 
-BEGIN { plan tests => 8 };
+BEGIN { plan tests => 9 };
 
 # Exporter.pm
 eval { require Exporter; };
@@ -20,6 +20,11 @@ ok($@, '', 'Required module AutoLoader missing');
 # Data::Dumper.pm
 eval { require Data::Dumper; };
 ok($@, '', 'Required module Data::Dumper missing');
+
+# Data::Denter.pm
+eval { require Data::Denter; };
+ok($@, '', 'Required module Data::Denter missing');
+
 
 # Storable.pm
 eval { require Storable; };
