@@ -1,5 +1,14 @@
 Revision history for Perl extension Data::Serializer
 
+0.23  Fri May 28 17:21:11 MST 2004
+	- Added store and retrieve functions for simple persistence
+	    Thanks to 
+	      Nick Stutterer <nick@tesbo.com>
+		and
+	      =?ISO-8859-1?Q?=22Murat_=DCnalan=22?= <murat.uenalan@gmx.de>
+	     For requesting this useful feature.
+	- Updated cookbook persistence example
+
 0.22  Fri Mar  5 16:39:36 MST 2004
 	- Split up and organized test suite
 	- Added support for XML::Simple

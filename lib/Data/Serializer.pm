@@ -4,6 +4,7 @@ use strict;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
 use Carp;
+use IO::File;
 require 5.004 ;
 require Exporter;
 require AutoLoader;
@@ -16,7 +17,7 @@ require AutoLoader;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.22';
+$VERSION = '0.23';
 
 # Preloaded methods go here.
 {
@@ -403,6 +404,33 @@ Currently is only supported by Config::General, and XML::Dumper.
                                   options    => { dtd => 1, }
                                   ) or die "$!\n";
 
+=item B<store> - serialize data and write it to a file (or file handle)
+
+  $obj->store({a => [1,2,3],b => 5},$file, [$mode, $perm]);
+
+  or 
+
+  $obj->store({a => [1,2,3],b => 5},$fh);
+
+
+Serializes the reference specified using the B<serialize> method
+and writes it out to the specified file or filehandle.  
+
+If a file path is specified you may specify an optional mode and permission as the
+next two arguments.  See L<IO::File> for examples.
+
+Trips an exception if it is unable to write to the specified file.
+
+=item B<retrieve> - read data from file (or file handle) and return it after deserialization 
+
+  my $ref = $obj->retrieve($file);
+
+  or 
+
+  my $ref = $obj->retrieve($fh);
+
+Reads first line of supplied file or filehandle and returns it deserialized.
+
 =back
 
 =head1 TRANSIENCE 
@@ -427,8 +455,6 @@ Neil Neely <F<neil@frii.net>>.
 Feature requests are certainly welcome. 
 
 =head1 COPYRIGHT
-
-Copyright (c) 2001-2004 Front Range Internet, Inc.
 
 Copyright (c) 2001-2004 Neil Neely.  All rights reserved.
 
@@ -478,6 +504,8 @@ because a woman of such quality deserves a dedication.
 =item L<Crypt(3)>
 
 =item L<MIME::Base64(3)>
+
+=item L<IO::File(3)>
 
 =item L<Tie::Transient(3)>
 
@@ -646,6 +674,49 @@ sub serialize {
     $value = $token . $value;
   }
   return $value;
+}
+
+sub store {
+  my $self = (shift);
+  my $data = (shift);
+  my $file_or_fh = (shift);
+
+  if (ref($file_or_fh)) {
+    #it is a file handle so print straight to it
+    print $file_or_fh $self->serialize($data), "\n";
+    #We didn't open the filehandle, so we shouldn't close it.
+  } else {
+    #it is a file, so open it
+    my ($mode,$perm) = @_;
+    unless (defined $mode) {
+      $mode = O_CREAT|O_WRONLY;
+    }
+    unless (defined $perm) {
+      $perm = 0600;
+    }
+    my $fh = new IO::File $file_or_fh, $mode,$perm || croak "Cannot write to $file_or_fh: $!";
+    print $fh $self->serialize($data), "\n";
+    $fh->close();
+  }
+}
+
+sub retrieve {
+  my $self = (shift);
+  my $file_or_fh = (shift);
+  if (ref($file_or_fh)) {
+    #it is a file handle so read straight from it
+    my $input = <$file_or_fh>;
+    chomp($input);
+    return $self->deserialize($input);
+    #We didn't open the filehandle, so we shouldn't close it.
+  } else {
+    my $fh = new IO::File; 
+    $fh->open($file_or_fh, O_RDONLY) ||  croak "Cannot read from $file_or_fh: $!";
+    my $input = <$fh>;
+    chomp($input);
+    $fh->close;
+    return $self->deserialize($input);
+  }
 }
 
 sub raw_serialize {

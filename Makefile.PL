@@ -9,6 +9,7 @@ WriteMakefile(
     'VERSION_FROM'	=> 'lib/Data/Serializer.pm', # finds $VERSION
     'AUTHOR'		=> 'Neil Neely (neil@frii.net)',
     'PREREQ_PM'		=> 	{
+	                 	  'IO::File' => 0,
 	                 	  'Digest::SHA1' => 0,
 	                 	  'Data::Dumper' => 2.08,
        	               		},

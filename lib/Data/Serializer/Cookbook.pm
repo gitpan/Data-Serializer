@@ -2,7 +2,7 @@ package Data::Serializer::Cookbook;
 
 use vars ('$VERSION');
 
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 1;
 
@@ -125,34 +125,21 @@ passed over a link since it last ran.
   my $last_run_datafile = '/full/path/to/file/lastrun.data';
 
   #We keep our data as a hash reference
-  my $last_data = {};
-  if (open(INFILE, '<', $last_run_datafile)) {
-    my $serialized_data = <INFILE>;
-    close(INFILE);
-    $last_data = $serializer->deserialize($serialized_data); 
-  }
+  my $last_data = $serializer->retrieve($last_run_datafile);
+  
   #Pull in our new data through 'pull_data()';
   my $new_data = query_router($router);
 
   #run comparison code
   run_comparison($last_data,$new_data);
 
-  my $serialized_output = $serializer->serialize($new_data);
-
-  open(OUTFILE, '>', $last_run_datafile) 
-    or die "Couldn't write to $last_run_datafile: $!\n";
-
-  print OUTFILE $serialized_output;
-  close(OUTFILE);
-
+  $serializer->store($new_data);
 
 =head1 AUTHOR
 
 Neil Neely <F<neil@frii.net>>.
 
 =head1 COPYRIGHT
-
-Copyright (c) 2001-2004 Front Range Internet, Inc.
 
 Copyright (c) 2001-2004 Neil Neely.  All rights reserved.
 

@@ -185,6 +185,16 @@ sub run_test {
         if (grep {/raw/} $features) {
           $frozen = $obj->raw_serialize($testrefs{$test});
           $thawed = $obj->raw_deserialize($frozen);
+        } elsif (grep {/fh-storage/} $features) {
+	  open(FH, '>', './t/datastore.txt'); 
+          $obj->store($testrefs{$test},*FH);
+          close(FH);
+	  open(FH, '<', './t/datastore.txt'); 
+          $thawed = $obj->retrieve(*FH);
+          close(FH);
+        } elsif (grep {/storage/} $features) {
+          $obj->store($testrefs{$test},'./t/datastore.txt');
+          $thawed = $obj->retrieve('./t/datastore.txt');
         } else {
           $frozen = $obj->serialize($testrefs{$test});
           $thawed = $obj->deserialize($frozen);

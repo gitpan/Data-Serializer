@@ -23,7 +23,7 @@ foreach my $serializer (keys %serializers) {
 
 $T->msg("No serializers found!!") unless (@serializers);
 
-my @types = qw(raw basic non-portable encoding encryption compression);
+my @types = qw(raw basic non-portable encoding encryption compression storage);
 
 find_features($T,@types);
 
@@ -45,6 +45,9 @@ push(@feature_combos, "encoding compression")
 
 push(@feature_combos, "encoding encryption compression")
 	if ($found_type{'compression'} && $found_type{'encryption'} && $found_type{'encoding'});
+
+push(@feature_combos, "encoding encryption compression storage")
+	if ($found_type{'compression'} && $found_type{'encryption'} && $found_type{'encoding'} && $found_type{'storage'});
 
 
 my $testcount = 0;
