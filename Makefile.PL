@@ -9,7 +9,28 @@ unless (-d "./t") {
 
 my %extensions;
 
-foreach my $ext (qw (Crypt::CBC Compress::Zlib Tie::Transient)) {
+
+#
+# for better or worse we use a default of Blowfish when dealing with Crypt::CBC
+# So we really need both installed to have the modules encryption work out of box
+# thus only if both are installed do we run the encryption tests
+# This only affects the test though, not the module itself, so you don't need blowfish
+# installed in order to use other encryption methods with Crypt::CBC such as Crypt::DES
+# 			neil - 2002/07/01 13:30:35 -0600 (MDT)
+#
+{
+  my $cryptcbc = (eval "require Crypt::CBC") ? 1 : 0; 
+  my $cryptblowfish = (eval "require Crypt::Blowfish") ? 1 : 0; 
+  my $valid = ($cryptcbc && $cryptblowfish);
+  $extensions{'Crypt::CBC'} = $valid;
+  unless($valid) {
+    my $template = build_skip_test('Crypt::CBC');  
+    write_test('Crypt::CBC',$template);
+  }
+}
+
+
+foreach my $ext (qw (Compress::Zlib Tie::Transient)) {
   my $valid = (eval "require $ext") ? 1 : 0; 
   $extensions{$ext} = $valid;
   unless($valid) {
