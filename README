@@ -35,34 +35,37 @@ METHODS
                                  portable   => '1',
                                  compress   => '0',
                            serializer_token => '1',
+                                   options  => {},
                                 );
 
         new is the constructor object for Data::Serializer objects.
 
-            The default *serializer* is `Data::Dumper'
+        *   The default *serializer* is "Data::Dumper"
 
-            The default *digester* is `SHA1'
+        *   The default *digester* is "SHA1"
 
-            The default *cipher* is `Blowfish'
+        *   The default *cipher* is "Blowfish"
 
-            The default *secret* is `undef'
+        *   The default *secret* is "undef"
 
-            The default *portable* is `1'
+        *   The default *portable* is 1
 
-            The default *compress* is `0'
+        *   The default *compress* is 0
 
-            The default *serializer_token* is `1'
+        *   The default *serializer_token* is 1
 
-    serialze - serialize referece
+        *   The default *options* is "{}" (pass nothing on to serializer)
+
+    serialize - serialize reference
           $serialized = $obj->serialize({a => [1,2,3],b => 5});
 
-        Serializes the reference sepecified.
+        Serializes the reference specified.
 
         Will compress if compress is a true value.
 
         Will encrypt if secret is defined.
 
-    deserialze - deserialize reference
+    deserialize - deserialize reference
           $deserialized = $obj->deserialize($serialized);
 
         Reverses the process of serialization and returns a copy of the
@@ -87,11 +90,12 @@ METHODS
     compress - compression of data
         Compresses serialized data. Default is not to use it.
 
-    serialzer - change the serializer
-        Currently have 3 supported serializers: Storable, FreezeThaw and
-        Data::Dumper. Default is to use Data::Dumper.
+    serializer - change the serializer
+        Currently have 5 supported serializers: Storable, FreezeThaw
+        Data::Denter Config::General and Data::Dumper. Default is to use
+        Data::Dumper.
 
-        Each serializer has its own caveat's about usage expecially when
+        Each serializer has its own caveat's about usage especially when
         dealing with cyclical data structures or CODE references. Please see
         the appropriate documentation in those modules for further
         information.
@@ -109,7 +113,31 @@ METHODS
         Data::Serializer prepends a token that identifies what was used to
         process its data. This is used internally to allow runtime
         determination of how to extract Serialized data. Disabling this
-        feature is not recomended.
+        feature is not recommended.
+
+    options - pass options through to underlying serializer
+        Currently is only supported by Config::General.
+
+          my $obj = Data::Serializer->new(serializer=>'Config::General',
+                                                        options    => {
+                                                          -LowerCaseNames       => 1,
+                                                          -UseApacheInclude     => 1,
+                                                          -MergeDuplicateBlocks => 1,
+                                                          -AutoTrue             => 1,
+                                                          -InterPolateVars      => 1
+                                                        },
+                                                      ) or die "$!\n";
+
+TRANSIENCE
+    Data::Serializer is aware of Tie::Transient. What this means is that you
+    use Tie::Transient as normal, and when your object is serialized, the
+    transient components will be automatically removed for you.
+
+    Thanks to Brian Moseley <bcm@maz.org> for the Tie::Transient module, and
+    recomendations on how to integrate it into Data::Serializer.
+
+    Tie::Transient is not yet on CPAN, but can be downloaded directly from
+    Brian's site here: http://www.maz.org/perl/Tie-Transient-0.05.tar.gz
 
 TODO
 EXAMPLES
@@ -120,13 +148,14 @@ AUTHOR
     Raphael Manfredi in the MLDBM module.
 
 COPYRIGHT
-    Copyright (c) 2001 Front Range Internet, Inc.
+    Copyright (c) 2001,2002 Front Range Internet, Inc.
 
-    Copyright (c) 2001 Neil Neely. All rights reserved.
+    Copyright (c) 2001,2002 Neil Neely. All rights reserved.
 
     This program is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself.
 
 SEE ALSO
-    perl(1), Data::Dumper(3), Storable(3), FreezeThaw(3), MLDBM(3).
+    perl(1), Data::Dumper(3), Data::Denter(3), Storable(3), FreezeThaw(3),
+    Config::General(3), MLDBM(3), Tie::Transient(3).
 

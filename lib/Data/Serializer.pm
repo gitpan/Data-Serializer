@@ -16,7 +16,7 @@ require AutoLoader;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.15';
+$VERSION = '0.16';
 
 
 # Preloaded methods go here.
@@ -31,6 +31,7 @@ $VERSION = '0.15';
                   secret     => undef,
                   portable   => '1',
                   compress   => '0',
+                  options    => {},
                  transient   => '0',
             serializer_token => '1',
                 );
@@ -62,7 +63,7 @@ $VERSION = '0.15';
     } else {
       $serializer = $_internal{$id}->{serializer};
     }
-    $_internal{$id}->{serializer_obj} = {};
+    $_internal{$id}->{serializer_obj} = {options => $self->options()};
     bless $_internal{$id}->{serializer_obj}, "Data::Serializer::$serializer";
   }
   sub serializer {
@@ -134,6 +135,15 @@ $VERSION = '0.15';
     my $return = $_internal{$id}->{portable};
     if (@_) {
       $_internal{$id}->{portable} = (shift);
+    }
+    return $return;
+  }
+  sub options {
+    my $self = (shift);
+    my $id = $$self;
+    my $return = $_internal{$id}->{options};
+    if (@_) {
+      $_internal{$id}->{options} = (shift);
     }
     return $return;
   }
@@ -232,6 +242,7 @@ and encryption.
                          portable   => '1',
                          compress   => '0',
                    serializer_token => '1',
+                           options  => {},
                         );
 
 
@@ -266,6 +277,10 @@ The default I<compress> is C<0>
 =item
 
 The default I<serializer_token> is C<1>
+
+=item
+
+The default I<options> is C<{}> (pass nothing on to serializer)
 
 =back
 
@@ -311,7 +326,7 @@ Compresses serialized data.  Default is not to use it.
 
 =item B<serializer> - change the serializer
 
-Currently have 4 supported serializers: Storable, FreezeThaw Data::Denter and Data::Dumper.
+Currently have 5 supported serializers: Storable, FreezeThaw Data::Denter Config::General and Data::Dumper.
 Default is to use Data::Dumper.
 
 Each serializer has its own caveat's about usage especially when dealing with
@@ -333,6 +348,20 @@ Data::Serializer prepends a token that identifies what was used to process its d
 This is used internally to allow runtime determination of how to extract Serialized
 data.   Disabling this feature is not recommended.
 
+=item B<options> - pass options through to underlying serializer
+
+Currently is only supported by Config::General.  
+
+  my $obj = Data::Serializer->new(serializer=>'Config::General',
+                                                options    => {
+                                                  -LowerCaseNames       => 1,
+                                                  -UseApacheInclude     => 1,
+                                                  -MergeDuplicateBlocks => 1,
+                                                  -AutoTrue             => 1,
+                                                  -InterPolateVars      => 1
+                                                },
+                                              ) or die "$!\n";
+
 =back
 
 =head1 TRANSIENCE 
@@ -344,6 +373,8 @@ components will be automatically removed for you.
 Thanks to Brian Moseley <bcm@maz.org> for the Tie::Transient module, and 
 recomendations on how to integrate it into Data::Serializer.
 
+Tie::Transient is not yet on CPAN, but can be downloaded directly from Brian's 
+site here:  http://www.maz.org/perl/Tie-Transient-0.05.tar.gz
 
 =head1 TODO
 
@@ -369,7 +400,7 @@ and/or modify it under the same terms as Perl itself.
 
 =head1 SEE ALSO
 
-perl(1), Data::Dumper(3), Data::Denter(3), Storable(3), FreezeThaw(3), MLDBM(3), Tie::Transient(3).
+perl(1), Data::Dumper(3), Data::Denter(3), Storable(3), FreezeThaw(3), Config::General(3), MLDBM(3), Tie::Transient(3).
 
 =cut
 

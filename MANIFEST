@@ -8,3 +8,6 @@ lib/Data/Serializer/Storable.pm
 lib/Data/Serializer/FreezeThaw.pm
 lib/Data/Serializer/Data/Dumper.pm
 lib/Data/Serializer/Data/Denter.pm
+lib/Data/Serializer/Config/General.pm
+t/ExtUtils/TBone.pm
+t/main.t
