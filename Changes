@@ -1,15 +1,30 @@
 Revision history for Perl extension Data::Serializer
 
-0.20  Fri Feb 13 17:32:02 MDT 2004
+0.22  Fri Mar  5 16:39:36 MST 2004
+	- Split up and organized test suite
+	- Added support for XML::Simple
+	- Created Data::Serializer::Cookbook
+
+0.21  Tue Feb 24 16:57:19 MST 2004
+	- Added support for PHP::Serializer
+	- Added support for XML::Dumper
+	- Added raw_serialize and raw_deserialize methods
+	    allows direct access to underlying serializers
+            useful to import/export data between aps that don't
+	    understand Data::Serializer (like say serialized 
+            PHP data)
+	- Added test for serializing scalars
+
+0.20  Fri Feb 13 17:32:02 MST 2004
 	- Improved test suite to test combination of features
 	- cleaned up bug in handing of 'non-portable' serialized data
 
-0.19  Fri Feb 13 14:46:30 MDT 2004
+0.19  Fri Feb 13 14:46:30 SDT 2004
 	- Modified makefile to include dependancy on Digest::SHA1
 		Thanks (again) to Florian Helmberger <fh@laudatio.com>
                   for finding this discrepancy.
 
-0.18  Fri Feb 13 11:17:24 MDT 2004
+0.18  Fri Feb 13 11:17:24 SDT 2004
 	- Added support for MIME::Base64 for 'ascii armoring' serialized
 	  data.
 	- Minor modifications to pod documentation
@@ -43,18 +58,18 @@ Revision history for Perl extension Data::Serializer
 	- Corrected typo's in pod documentation
           Thanks to Florian Helmberger <f.helmberger@uptime.at>
 
-0.13  Mon Jan 14 12:49:10 2002
+0.13  Mon Jan 14 12:49:10 MST 2002
         - Added support for Tie::Transient
             Thanks to recomendation from brian moseley <bcm@maz.org>)
 
-0.12  Mon Jan 14 12:23:28 2002
+0.12  Mon Jan 14 12:23:28 MST 2002
         - Cleaned up installation tests
 
-0.11  Tue Jan  8 13:28:43 2002
+0.11  Tue Jan  8 13:28:43 MST 2002
         - Removed build dependencies for all but Data::Dumper
             Thanks to recomendation from brian moseley <bcm@maz.org>
 
-0.10  Mon Jan  7 13:00:24 2002
+0.10  Mon Jan  7 13:00:24 MST 2002
         - Added Support for Data::Denter
 
 0.09  Fri Nov  2 08:14:07 2001

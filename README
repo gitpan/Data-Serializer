@@ -23,160 +23,204 @@ DESCRIPTION
     currently available. Adds the functionality of both compression and
     encryption.
 
+EXAMPLES
+    Please see Data::Serializer::Cookbook(3)
+
 METHODS
-    new - constructor
-          $obj = Data::Serializer->new();
+        new - constructor
+              $obj = Data::Serializer->new();
 
-          $obj = Data::Serializer->new(
-                                 serializer => 'Data::Dumper',
-                                 digester   => 'SHA1',
-                                 cipher     => 'Blowfish',
-                                 secret     => undef,
-                                 portable   => '1',
-                                 compress   => '0',
-                           serializer_token => '1',
-                                   options  => {},
-                                );
+              $obj = Data::Serializer->new(
+                                     serializer => 'Data::Dumper',
+                                     digester   => 'SHA1',
+                                     cipher     => 'Blowfish',
+                                     secret     => undef,
+                                     portable   => '1',
+                                     compress   => '0',
+                               serializer_token => '1',
+                                       options  => {},
+                                    );
 
-        new is the constructor object for Data::Serializer objects.
+            new is the constructor object for Data::Serializer objects.
 
-        *   The default *serializer* is "Data::Dumper"
+            *   The default *serializer* is "Data::Dumper"
 
-        *   The default *digester* is "SHA1"
+            *   The default *digester* is "SHA1"
 
-        *   The default *cipher* is "Blowfish"
+            *   The default *cipher* is "Blowfish"
 
-        *   The default *secret* is "undef"
+            *   The default *secret* is "undef"
 
-        *   The default *portable* is 1
+            *   The default *portable* is 1
 
-        *   The default *encoding* is "hex"
+            *   The default *encoding* is "hex"
 
-        *   The default *compress* is 0
+            *   The default *compress* is 0
 
-        *   The default *serializer_token* is 1
+            *   The default *serializer_token* is 1
 
-        *   The default *options* is "{}" (pass nothing on to serializer)
+            *   The default *options* is "{}" (pass nothing on to
+                serializer)
 
-    serialize - serialize reference
-          $serialized = $obj->serialize({a => [1,2,3],b => 5});
+        serialize - serialize reference
+              $serialized = $obj->serialize({a => [1,2,3],b => 5});
 
-        Serializes the reference specified.
+            Serializes the reference specified.
 
-        Will compress if compress is a true value.
+            Will compress if compress is a true value.
 
-        Will encrypt if secret is defined.
+            Will encrypt if secret is defined.
 
-    deserialize - deserialize reference
-          $deserialized = $obj->deserialize($serialized);
+        deserialize - deserialize reference
+              $deserialized = $obj->deserialize($serialized);
 
-        Reverses the process of serialization and returns a copy of the
-        original serialized reference.
+            Reverses the process of serialization and returns a copy of the
+            original serialized reference.
 
-    freeze - synonym for serialize
-          $serialized = $obj->freeze({a => [1,2,3],b => 5});
+        freeze - synonym for serialize
+              $serialized = $obj->freeze({a => [1,2,3],b => 5});
 
-    thaw - synonym for deserialize
-          $deserialized = $obj->thaw($serialized);
+        thaw - synonym for deserialize
+              $deserialized = $obj->thaw($serialized);
 
-    secret - specify secret for use with encryption
-          $obj->secret('mysecret');
+        raw_serialize - serialize reference in raw form
+              $serialized = $obj->raw_serialize({a => [1,2,3],b => 5});
 
-        Changes setting of secret for the Data::Serializer object. Can also
-        be set in the constructor. If specified than the object will utilize
-        encryption.
+            This is a straight pass through to the underlying serializer,
+            nothing else is done. (no encoding, encryption, compression,
+            etc)
 
-    portable - encodes/decodes serialized data
-        Uses encoding method to ascii armor serialized data
+        raw_deserialize - deserialize reference in raw form
+              $deserialized = $obj->raw_deserialize($serialized);
 
-        Aids in the portability of serialized data.
+            This is a straight pass through to the underlying serializer,
+            nothing else is done. (no encoding, encryption, compression,
+            etc)
 
-    compress - compression of data
-        Compresses serialized data. Default is not to use it.
+        secret - specify secret for use with encryption
+              $obj->secret('mysecret');
 
-    serializer - change the serializer
-        Currently have 6 supported serializers: Storable, FreezeThaw,
-        Data::Denter, Config::General, YAML and Data::Dumper. Default is to
-        use Data::Dumper.
+            Changes setting of secret for the Data::Serializer object. Can
+            also be set in the constructor. If specified than the object
+            will utilize encryption.
 
-        Each serializer has its own caveat's about usage especially when
-        dealing with cyclical data structures or CODE references. Please see
-        the appropriate documentation in those modules for further
-        information.
+        portable - encodes/decodes serialized data
+            Uses encoding method to ascii armor serialized data
 
-    cipher - change the cipher method
-        Utilizes Crypt::CBC and can support any cipher method that it
-        supports.
+            Aids in the portability of serialized data.
 
-    digester - change digesting method
-        Uses Digest so can support any digesting method that it supports.
-        Digesting function is used internally by the encryption routine as
-        part of data verification.
+        compress - compression of data
+            Compresses serialized data. Default is not to use it. Will
+            compress if set to a true value $obj->compress(1);
 
-    encoding - change encoding method
-        Encodes data structure in ascii friendly manner. Currently the only
-        valid options are hex, or b64.
+        serializer - change the serializer
+            Currently have 8 supported serializers: Storable, FreezeThaw,
+            Data::Denter, Config::General, YAML, PHP::Serialization,
+            XML::Dumper, and Data::Dumper.
 
-        The b64 option uses Base64 encoding provided by MIME::Base64, but
-        strips out newlines.
+            Default is to use Data::Dumper.
 
-    serializer_token - add usage hint to data
-        Data::Serializer prepends a token that identifies what was used to
-        process its data. This is used internally to allow runtime
-        determination of how to extract Serialized data. Disabling this
-        feature is not recommended.
+            Each serializer has its own caveat's about usage especially when
+            dealing with cyclical data structures or CODE references. Please
+            see the appropriate documentation in those modules for further
+            information.
 
-    options - pass options through to underlying serializer
-        Currently is only supported by Config::General.
+        cipher - change the cipher method
+            Utilizes Crypt::CBC and can support any cipher method that it
+            supports.
 
-          my $obj = Data::Serializer->new(serializer=>'Config::General',
-                                                        options    => {
-                                                          -LowerCaseNames       => 1,
-                                                          -UseApacheInclude     => 1,
-                                                          -MergeDuplicateBlocks => 1,
-                                                          -AutoTrue             => 1,
-                                                          -InterPolateVars      => 1
-                                                        },
-                                                      ) or die "$!\n";
+        digester - change digesting method
+            Uses Digest so can support any digesting method that it
+            supports. Digesting function is used internally by the
+            encryption routine as part of data verification.
+
+        encoding - change encoding method
+            Encodes data structure in ascii friendly manner. Currently the
+            only valid options are hex, or b64.
+
+            The b64 option uses Base64 encoding provided by MIME::Base64,
+            but strips out newlines.
+
+        serializer_token - add usage hint to data
+            Data::Serializer prepends a token that identifies what was used
+            to process its data. This is used internally to allow runtime
+            determination of how to extract Serialized data. Disabling this
+            feature is not recommended.
+
+        options - pass options through to underlying serializer
+            Currently is only supported by Config::General, and XML::Dumper.
+
+              my $obj = Data::Serializer->new(serializer => 'Config::General',
+                                              options    => {
+                                                         -LowerCaseNames       => 1,
+                                                         -UseApacheInclude     => 1,
+                                                         -MergeDuplicateBlocks => 1,
+                                                         -AutoTrue             => 1,
+                                                         -InterPolateVars      => 1
+                                                            },
+                                                          ) or die "$!\n";
+
+              or
+
+              my $obj = Data::Serializer->new(serializer => 'XML::Dumper',
+                                              options    => { dtd => 1, }
+                                              ) or die "$!\n";
 
 TRANSIENCE
-    Data::Serializer is aware of Tie::Transient. What this means is that you
-    use Tie::Transient as normal, and when your object is serialized, the
-    transient components will be automatically removed for you.
+        Data::Serializer is aware of Tie::Transient. What this means is that
+        you use Tie::Transient as normal, and when your object is
+        serialized, the transient components will be automatically removed
+        for you.
 
-    Tie::Transient is not on CPAN, and doesn't look like it ever will be.
-    With the advent of attributes from 5.8 this feature should probably be
-    deprecated anyway.
+        Tie::Transient is not on CPAN, and doesn't look like it ever will
+        be. With the advent of attributes from 5.8 this feature should
+        probably be deprecated anyway.
 
-    If you would like to use Tie::Transient you can download it directly
-    from Brian's site here:
-    http://www.maz.org/perl/Tie-Transient-0.05.tar.gz
+        If you would like to use Tie::Transient you can download it directly
+        from Brian's site here:
+        http://www.maz.org/perl/Tie-Transient-0.05.tar.gz
 
-    With perl attributes in 5.8, this should probably be deprecated.
+        With perl attributes in 5.8, this should probably be deprecated.
 
 AUTHOR
-    Neil Neely <neil@frii.net>.
+        Neil Neely <neil@frii.net>.
+
+        Feature requests are certainly welcome.
 
 COPYRIGHT
-    Copyright (c) 2001-2004 Front Range Internet, Inc.
+        Copyright (c) 2001-2004 Front Range Internet, Inc.
 
-    Copyright (c) 2001-2004 Neil Neely. All rights reserved.
+        Copyright (c) 2001-2004 Neil Neely. All rights reserved.
 
-    This program is free software; you can redistribute it and/or modify it
-    under the same terms as Perl itself.
+        This program is free software; you can redistribute it and/or modify
+        it under the same terms as Perl itself.
 
 ACKNOWLEDGEMENTS
-    Gurusamy Sarathy and Raphael Manfredi for writing MLDBM, the module
-    which inspired the creation of Data::Serializer.
+        Gurusamy Sarathy and Raphael Manfredi for writing MLDBM, the module
+        which inspired the creation of Data::Serializer.
 
-    And a thanks to all of you who have provided the feedback that has
-    improved this module over the years.
+        And thanks to all of you who have provided the feedback that has
+        improved this module over the years.
 
-    In particular I'd like to thank Florian Helmberger, for the numerous
-    suggestions and bug fixes.
+        In particular I'd like to thank Florian Helmberger, for the numerous
+        suggestions and bug fixes.
+
+DEDICATION
+        This module is dedicated to my beautiful wife Erica, because a woman
+        of such quality deserves a dedication.
 
 SEE ALSO
-    perl(1), Data::Dumper(3), Data::Denter(3), Storable(3), FreezeThaw(3),
-    Config::General(3), YAML(3), MLDBM(3), Tie::Transient(3),
-    Compress::Zlib(3), Digest(3), Crypt(3), MIME::Base64(3).
+        Data::Dumper(3)
+        Data::Denter(3)
+        Storable(3)
+        FreezeThaw(3)
+        Config::General(3)
+        YAML(3)
+        PHP::Serialization(3)
+        XML::Dumper(3)
+        Compress::Zlib(3)
+        Digest(3)
+        Crypt(3)
+        MIME::Base64(3)
+        Tie::Transient(3)
 

@@ -10,6 +10,26 @@ lib/Data/Serializer/Data/Dumper.pm
 lib/Data/Serializer/Data/Denter.pm
 lib/Data/Serializer/Config/General.pm
 lib/Data/Serializer/YAML.pm
+lib/Data/Serializer/PHP/Serialization.pm
+lib/Data/Serializer/XML/Dumper.pm
+lib/Data/Serializer/XML/Simple.pm
+lib/Data/Serializer/Cookbook.pm
 t/ExtUtils/TBone.pm
-t/main.t
+t/01-01-Data-Dumper.t
+t/01-02-Data-Denter.t
+t/01-03-Storable.t
+t/01-04-FreezeThaw.t
+t/01-05-Config-General.t
+t/01-06-YAML.t
+t/01-07-XML-Dumper.t
+t/01-08-PHP-Serialization.t
+t/01-09-XML-Simple.t
+t/02-Raw.t
+t/03-Non-Portable.t
+t/04-Compression.t
+t/05-Encryption.t
+t/06-B64-Encoding.t
+t/07-MD5-Digest.t
+t/08-Feature-Combos.t
+t/serializer-testlib
 META.yml                                 Module meta-data (added by MakeMaker)

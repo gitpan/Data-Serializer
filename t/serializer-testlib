@@ -1,0 +1,234 @@
+package My::TestObj;
+
+
+sub new {
+  my $class = (shift);
+  my $self = {};
+  $self->{monkey} = [qw(a b c d e f g h)];
+  bless $self, $class;
+  return $self;
+}
+
+sub data_test {
+  my $self = (shift);
+  return $self->{monkey}->[4];
+}
+
+sub package_test {
+  return ref( (shift) );
+}
+
+package main;
+
+$object_package = 'My::TestObj';
+
+%counts = (
+                simpleobject  => 2,
+                simplescalar  => 1,
+                simplearray   => 1,
+                complexarray  => 2,
+                simplehash    => 1,
+                complexhash   => 3,
+           );
+
+
+%testrefs = (
+
+   simpleobject    => My::TestObj->new(),
+   simplescalar    => \'pointless',
+   simplehash    => { alpha => 1,
+	   	     beta  => 2 },
+
+   simplearray   => [qw ( one two three ) ],
+
+   complexarray  => ['one', {alpha => 1, beta => 2},['bob','dole']],
+
+   complexhash   => {
+			apple  => [qw ( one two three ) ],
+			orange => { alpha => 1, beta  => 2 },
+			pear   => { 
+				chain => {
+					hippie => 'smelly', 
+					donkey => 'worship',
+					 }, 
+				monkey => 3,
+			 	  },
+		 },
+	);
+
+%serializers = (
+                        'Data::Dumper'  => {
+                                                simpleobject  => $counts{simpleobject},
+                                                simplescalar  => $counts{simplescalar},
+                                                simplearray  => $counts{simplearray},
+                                                complexarray => $counts{complexarray},
+                                                simplehash   => $counts{simplehash},
+                                                complexhash  => $counts{complexhash},
+                                           },
+                        'Data::Denter'  => {
+                                                simpleobject  => $counts{simpleobject},
+                                                simplescalar  => $counts{simplescalar},
+                                                simplearray  => $counts{simplearray},
+                                                complexarray => $counts{complexarray},
+                                                simplehash   => $counts{simplehash},
+                                                complexhash  => $counts{complexhash},
+                                           },
+                        'Storable'      => {
+                                                simpleobject  => $counts{simpleobject},
+                                                simplescalar  => $counts{simplescalar},
+                                                simplearray  => $counts{simplearray},
+                                                complexarray => $counts{complexarray},
+                                                simplehash   => $counts{simplehash},
+                                                complexhash  => $counts{complexhash},
+                                           },
+                        'FreezeThaw'    => {
+                                                simpleobject  => $counts{simpleobject},
+                                                simplescalar  => $counts{simplescalar},
+                                                simplearray  => $counts{simplearray},
+                                                complexarray => $counts{complexarray},
+                                                simplehash   => $counts{simplehash},
+                                                complexhash  => $counts{complexhash},
+                                           },
+                        'Config::General' => {
+                                                simpleobject  => 0,
+                                                simplescalar  => 0,
+                                                simplearray  => 0,
+                                                complexarray => 0,
+                                                simplehash   => $counts{simplehash},
+                                                complexhash  => $counts{complexhash},
+                                           },
+                        'YAML'  => {
+                                                simpleobject  => $counts{simpleobject},
+                                                simplescalar  => $counts{simplescalar},
+                                                simplearray  => $counts{simplearray},
+                                                complexarray => $counts{complexarray},
+                                                simplehash   => $counts{simplehash},
+                                                complexhash  => $counts{complexhash},
+                                           },
+                        'XML::Dumper'   => {
+                                                simpleobject  => $counts{simpleobject},
+                                                simplescalar  => $counts{simplescalar},
+                                                simplearray  => $counts{simplearray},
+                                                complexarray => $counts{complexarray},
+                                                simplehash   => $counts{simplehash},
+                                                complexhash  => $counts{complexhash},
+                                           },
+                        'XML::Simple'   => {
+                                                simpleobject  => 0,
+                                                simplescalar  => 0,
+                                                simplearray  => $counts{simplearray},
+                                                complexarray => $counts{complexarray},
+                                                simplehash   => $counts{simplehash},
+                                                complexhash  => $counts{complexhash},
+                                           },
+                        'PHP::Serialization'    => {
+                                                simpleobject  => 0,
+                                                simplescalar  => 0,
+                                                simplearray  => $counts{simplearray},
+                                                complexarray => $counts{complexarray},
+                                                simplehash   => $counts{simplehash},
+                                                complexhash  => $counts{complexhash},
+                                           },
+                  );
+
+%features = (
+                'raw'     	 => [],
+                'non-portable'   => [],
+                'basic'     	 => [],
+                'cgopt'     	 => [],
+                'xmldumpopt'   	 => [],
+                'encryption'     => [qw (Crypt::CBC Crypt::Blowfish)],
+                'compression'    => [qw (Compress::Zlib)],
+                'encoding'       => [qw (MIME::Base64)],
+                'digester'       => [qw (Digest::MD5)],
+                );
+
+
+sub run_test {
+        my ($T,$serializer,$test,$features) = @_;
+        $T->msg("Test $serializer $test $features");  # message for the log
+        my $obj = Data::Serializer->new(serializer=>$serializer);
+        foreach my $feature (split(" ", $features)) {
+                if ($feature eq 'basic') {
+                        #do nothing special
+                } elsif ($feature eq 'non-portable') {
+                        #make sure we work without ascii armoring
+                        $obj->portable(0);
+                } elsif ($feature eq 'encryption') {
+                        #setup a secret so we use encryption on this run
+                        $obj->secret('test');
+                } elsif ($feature eq 'digester') {
+                        # use alternate digest (Digest::MD5)
+                } elsif ($feature eq 'compression') {
+                        # use compression (Compress::Zlib)
+                        $obj->compress(1);
+                } elsif ($feature eq 'encoding') {
+                        # test alternate encoding
+                        $obj->encoding('b64');
+                } elsif ($feature eq 'cgopt') {
+                        # test options for Config::General
+                        $obj->options( {
+                                         -LowerCaseNames       => 1,
+                                         -UseApacheInclude     => 1,
+                                         -MergeDuplicateBlocks => 1,
+                                         -AutoTrue             => 1,
+                                         -InterPolateVars      => 1
+                                       });
+                } elsif ($feature eq 'xmldumpopt') {
+                        # test options for XML::Dumper
+                        $obj->options( {
+                                         dtd       => 1,
+                                       });
+                }
+        }
+        my ($frozen,$thawed);
+        if (grep {/raw/} $features) {
+          $frozen = $obj->raw_serialize($testrefs{$test});
+          $thawed = $obj->raw_deserialize($frozen);
+        } else {
+          $frozen = $obj->serialize($testrefs{$test});
+          $thawed = $obj->deserialize($frozen);
+        }
+        if ($test eq 'simplescalar') {
+                $T->ok_eq(${$testrefs{$test}}, ${$thawed},'scalar');
+        }elsif ($test eq 'simpleobject') {
+                $T->ok_eq($testrefs{$test}->package_test(), $thawed->package_test,'object namespace');
+                $T->ok_eq($testrefs{$test}->data_test(), $thawed->data_test,'object data');
+        }elsif ($test eq 'simplearray') {
+                $T->ok_eq($testrefs{$test}->[0], $thawed->[0],'array');
+        } elsif ($test eq 'complexarray') {
+                $T->ok_eq($testrefs{$test}->[2]->[0], $thawed->[2]->[0],'array of arrays');
+                $T->ok_eqnum($testrefs{$test}->[1]->{alpha}, $thawed->[1]->{alpha},'array of hashes');
+        } elsif ($test eq 'simplehash') {
+                $T->ok_eqnum($testrefs{$test}->{alpha}, $thawed->{alpha},'hash');
+        } elsif ($test eq 'complexhash') {
+                $T->ok_eq($testrefs{$test}->{apple}->[1], $thawed->{apple}->[1],'hash of arrays');
+                $T->ok_eqnum($testrefs{$test}->{orange}->{alpha}, $thawed->{orange}->{alpha},'hash of hashes');
+                $T->ok_eq($testrefs{$test}->{pear}->{chain}->{hippie}, $thawed->{pear}->{chain}->{hippie},'hash of hash of hashes');
+        }
+}
+
+sub test_feature {
+	my ($feature) = @_;
+	foreach my $module (@{$features{$feature}}) {
+		return 0 unless (eval "require $module");
+        }
+        return 1;
+}
+
+sub test_serializer {
+	my ($serializer) = @_;
+        return 1 if (eval "require $serializer");
+	return 0;
+}
+
+
+sub find_features {
+	my $T = (shift);
+	foreach my $type (@_) {
+       		if (test_feature($type)) {
+               		$found_type{$type} = 1;
+               		$T->msg("Found feature $type");
+        	}
+       	}
+}

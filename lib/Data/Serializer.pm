@@ -16,8 +16,7 @@ require AutoLoader;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.20';
-
+$VERSION = '0.22';
 
 # Preloaded methods go here.
 {
@@ -224,6 +223,12 @@ Provides a unified interface to the various serializing modules
 currently available.  Adds the functionality of both compression
 and encryption. 
 
+=head1 EXAMPLES
+
+=over 4
+
+=item  Please see L<Data::Serializer::Cookbook(3)>
+
 =head1 METHODS
 
 =over 4
@@ -312,6 +317,20 @@ of the original serialized reference.
 
   $deserialized = $obj->thaw($serialized);
 
+=item B<raw_serialize> - serialize reference in raw form
+
+  $serialized = $obj->raw_serialize({a => [1,2,3],b => 5});
+
+This is a straight pass through to the underlying serializer,
+nothing else is done. (no encoding, encryption, compression, etc)
+
+=item B<raw_deserialize> - deserialize reference in raw form
+
+  $deserialized = $obj->raw_deserialize($serialized);
+
+This is a straight pass through to the underlying serializer,
+nothing else is done. (no encoding, encryption, compression, etc)
+
 =item B<secret> - specify secret for use with encryption
 
   $obj->secret('mysecret');
@@ -327,11 +346,15 @@ Aids in the portability of serialized data.
 
 =item B<compress> - compression of data
 
-Compresses serialized data.  Default is not to use it.
+Compresses serialized data.  Default is not to use it.  Will compress if set to a true value
+  $obj->compress(1);
+
 
 =item B<serializer> - change the serializer
 
-Currently have 6 supported serializers: Storable, FreezeThaw, Data::Denter, Config::General, YAML and Data::Dumper.
+Currently have 8 supported serializers: Storable, FreezeThaw, Data::Denter, Config::General, YAML, 
+PHP::Serialization,  XML::Dumper, and Data::Dumper.
+
 Default is to use Data::Dumper.
 
 Each serializer has its own caveat's about usage especially when dealing with
@@ -362,17 +385,23 @@ data.   Disabling this feature is not recommended.
 
 =item B<options> - pass options through to underlying serializer
 
-Currently is only supported by Config::General.  
+Currently is only supported by Config::General, and XML::Dumper.  
 
-  my $obj = Data::Serializer->new(serializer=>'Config::General',
-                                                options    => {
-                                                  -LowerCaseNames       => 1,
-                                                  -UseApacheInclude     => 1,
-                                                  -MergeDuplicateBlocks => 1,
-                                                  -AutoTrue             => 1,
-                                                  -InterPolateVars      => 1
+  my $obj = Data::Serializer->new(serializer => 'Config::General',
+                                  options    => {
+                                             -LowerCaseNames       => 1,
+                                             -UseApacheInclude     => 1,
+                                             -MergeDuplicateBlocks => 1,
+                                             -AutoTrue             => 1,
+                                             -InterPolateVars      => 1
                                                 },
                                               ) or die "$!\n";
+
+  or
+
+  my $obj = Data::Serializer->new(serializer => 'XML::Dumper',
+                                  options    => { dtd => 1, }
+                                  ) or die "$!\n";
 
 =back
 
@@ -395,6 +424,7 @@ With perl attributes in 5.8, this should probably be deprecated.
 
 Neil Neely <F<neil@frii.net>>.
 
+Feature requests are certainly welcome. 
 
 =head1 COPYRIGHT
 
@@ -410,16 +440,48 @@ and/or modify it under the same terms as Perl itself.
 Gurusamy Sarathy and Raphael Manfredi for writing MLDBM,
 the module which inspired the creation of Data::Serializer.
 
-And a thanks to all of you who have provided the feedback 
+And thanks to all of you who have provided the feedback 
 that has improved this module over the years.
 
 In particular I'd like to thank Florian Helmberger, for the 
 numerous suggestions and bug fixes.
 
+=head1 DEDICATION
+
+This module is dedicated to my beautiful wife Erica, 
+because a woman of such quality deserves a dedication.
+
 =head1 SEE ALSO
 
-perl(1), Data::Dumper(3), Data::Denter(3), Storable(3), FreezeThaw(3), Config::General(3), 
-YAML(3), MLDBM(3), Tie::Transient(3), Compress::Zlib(3), Digest(3), Crypt(3), MIME::Base64(3).
+=over 4
+
+=item  L<Data::Dumper(3)>
+
+=item  L<Data::Denter(3)>
+
+=item L<Storable(3)>
+
+=item L<FreezeThaw(3)>
+
+=item L<Config::General(3)>
+
+=item L<YAML(3)>
+
+=item L<PHP::Serialization(3)>
+
+=item L<XML::Dumper(3)>
+
+=item L<Compress::Zlib(3)>
+
+=item L<Digest(3)>
+
+=item L<Crypt(3)>
+
+=item L<MIME::Base64(3)>
+
+=item L<Tie::Transient(3)>
+
+=back
 
 =cut
 
@@ -586,6 +648,13 @@ sub serialize {
   return $value;
 }
 
+sub raw_serialize {
+  my $self = (shift);
+  my $serializer = $self->serializer;
+  return $self->_serialize(\@_,$serializer);
+  return $value;
+}
+
 sub _encode {
   my $self = (shift);
   my $value = (shift);
@@ -613,6 +682,12 @@ sub _decode {
   } else {
     croak "Unknown encoding method $encoding\n";
   }
+}
+
+sub raw_deserialize {
+  my $self = (shift);
+  my $serializer = $self->serializer;
+  return $self->_deserialize((shift),$serializer);
 }
 
 sub deserialize {
