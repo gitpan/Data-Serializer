@@ -1,0 +1,132 @@
+NAME
+    Data::Serializer:: - Modules that serialize data structures
+
+SYNOPSIS
+      use Data::Serializer;
+  
+      $obj = Data::Serializer->new();
+
+      $obj = Data::Serializer->new(
+                              serializer => 'Storable',
+                              digester   => 'MD5',
+                              cipher     => 'DES',
+                              secret     => 'my secret',
+                              compress   => 1,
+                            );
+
+      $serialized = $obj->serialize({a => [1,2,3],b => 5});
+      $deserialized = $obj->deserialize($serialized);
+      print "$deserialized->{b}\n";
+
+DESCRIPTION
+    Provides a unified interface to the various serializing modules
+    currently available. Adds the functionality of both compression and
+    encryption.
+
+METHODS
+    new - constructor
+          $obj = Data::Serializer->new();
+
+          $obj = Data::Serializer->new(
+                                 serializer => 'Data::Dumper',
+                                 digester   => 'SHA1',
+                                 cipher     => 'Blowfish',
+                                 secret     => undef,
+                                 portable   => '1',
+                                 compress   => '0',
+                           serializer_token => '1',
+                                );
+
+        new is the constructor object for Data::Serializer objects.
+
+            The default *serializer* is `Data::Dumper'
+
+            The default *digester* is `SHA1'
+
+            The default *cipher* is `Blowfish'
+
+            The default *secret* is `undef'
+
+            The default *portable* is `1'
+
+            The default *compress* is `0'
+
+            The default *serializer_token* is `1'
+
+    serialze - serialize referece
+          $serialized = $obj->serialize({a => [1,2,3],b => 5});
+
+        Serializes the reference sepecified.
+
+        Will compress if compress is a true value.
+
+        Will encrypt if secret is defined.
+
+    deserialze - deserialize reference
+          $deserialized = $obj->deserialize($serialized);
+
+        Reverses the process of serialization and returns a copy of the
+        original serialized reference.
+
+    freeze - synonym for serialize
+          $serialized = $obj->freeze({a => [1,2,3],b => 5});
+
+    thaw - synonym for deserialize
+          $deserialized = $obj->thaw($serialized);
+
+    secret - specify secret for use with encryption
+          $obj->secret('mysecret');
+
+        Changes setting of secret for the Data::Serializer object. Can also
+        be set in the constructor. If specified than the object will utilize
+        encryption.
+
+    portable - hex encodes/decodes serialized data
+        Aids in the portability of serialized data.
+
+    compress - compression of data
+        Compresses serialized data. Default is not to use it.
+
+    serialzer - change the serializer
+        Currently have 3 supported serializers: Storable, FreezeThaw and
+        Data::Dumper. Default is to use Data::Dumper.
+
+        Each serializer has its own caveat's about usage expecially when
+        dealing with cyclical data structures or CODE references. Please see
+        the appropriate documentation in those modules for further
+        information.
+
+    cipher - change the cipher method
+        Utilizes Crypt::CBC and can support any cipher method that it
+        supports.
+
+    digester - change digesting method
+        Uses Digest so can support any digesting method that it supports.
+        Digesting function is used internally by the encryption routine as
+        part of data verification.
+
+    serializer_token - add usage hint to data
+        Data::Serializer prepends a token that identifies what was used to
+        process its data. This is used internally to allow runtime
+        determination of how to extract Serialized data. Disabling this
+        feature is not recomended.
+
+TODO
+EXAMPLES
+AUTHOR
+    Neil Neely <neil@frii.net>.
+
+    Serializer code inspired heavily by the work of Gurusamy Sarathy and
+    Raphael Manfredi in the MLDBM module.
+
+COPYRIGHT
+    Copyright (c) 2001 Front Range Internet, Inc.
+
+    Copyright (c) 2001 Neil Neely. All rights reserved.
+
+    This program is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself.
+
+SEE ALSO
+    perl(1), Data::Dumper(3), Storable(3), FreezeThaw(3), MLDBM(3).
+

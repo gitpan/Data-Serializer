@@ -1,0 +1,13 @@
+Changes
+MANIFEST
+README
+INSTALL
+Makefile.PL
+lib/Data/Serializer.pm
+lib/Data/Serializer/Storable.pm
+lib/Data/Serializer/FreezeThaw.pm
+lib/Data/Serializer/Data/Dumper.pm
+t/require.t
+t/storable.t
+t/freezethaw.t
+t/datadumper.t

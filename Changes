@@ -1,0 +1,26 @@
+Revision history for Perl extension Data::Serializer
+
+0.07  Wed Oct  5 11:42:20 2001
+	- changed token system to be more flexible
+	- added compression
+	- cleaned up 'portability' option
+	- updated documentation
+	- updated tests
+
+0.06  Wed Oct  4 16:27:02 2001
+	- added Encryption
+
+0.05  Wed Oct  4 14:30:13 2001
+	- added t/ tests
+
+0.04  Wed Oct  4 12:35:44 2001
+	- added documentation
+
+0.03  Wed Oct  4 11:32:10 2001
+	- added serializer_token to assist deserialization
+
+0.02  Tue Oct  3 15:32:19 2001
+	- completed generic serializer/deserializer interface
+
+0.01  Tue Oct  3 11:11:36 2001
+	- original version; created by h2xs 1.19
