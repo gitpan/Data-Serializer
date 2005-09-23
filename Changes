@@ -1,5 +1,17 @@
 Revision history for Perl extension Data::Serializer
 
+0.30  Thu Sep 15 08:49:28 MDT 2005
+	- Modified call to Digest module to bring it up to current.
+	- Changed default digester to SHA-256
+
+		Thanks to Mark Shelor <mshelor@comcast.net> for sending
+		out the notice that sha1 is now considered vulnerable.
+
+	* If you explicitly want to use SHA1 that will still work, but be
+	  advised that is no longer considered secure.  This only impacts
+          serialization if you are using it with encryption.
+	  
+
 0.29  Mon Feb 07 18:42:14 MDT 2005
 	- Modified constructor to test exists rather then defined allowing 
 	  features to be disabled in the constructor.

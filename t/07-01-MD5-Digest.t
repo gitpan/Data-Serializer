@@ -23,7 +23,7 @@ foreach my $serializer (keys %serializers) {
 
 $T->msg("No serializers found!!") unless (@serializers);
 
-my @types = qw(digester);
+my @types = qw(md5);
 
 find_features($T,@types);
 

@@ -29,7 +29,9 @@ t/03-Non-Portable.t
 t/04-Compression.t
 t/05-Encryption.t
 t/06-B64-Encoding.t
-t/07-MD5-Digest.t
+t/07-01-MD5-Digest.t
+t/07-02-SHA1-Digest.t
+t/07-03-SHA-256-Digest.t
 t/08-Store-Retrieve.t
 t/09-Feature-Combos.t
 t/serializer-testlib

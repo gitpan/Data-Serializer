@@ -177,7 +177,9 @@ $testrefs{selfrefarray}->[3]   = $testrefs{selfrefarray}->[1];
                 'encryption'     => [qw (Crypt::CBC Crypt::Blowfish)],
                 'compression'    => [qw (Compress::Zlib)],
                 'encoding'       => [qw (MIME::Base64)],
-                'digester'       => [qw (Digest::MD5)],
+                'md5'       => [qw (Digest::MD5)],
+                'sha1'     	 => [],
+                'sha-256'     	 => [],
                 );
 
 
@@ -194,8 +196,18 @@ sub run_test {
                 } elsif ($feature eq 'encryption') {
                         #setup a secret so we use encryption on this run
                         $obj->secret('test');
-                } elsif ($feature eq 'digester') {
-                        # use alternate digest (Digest::MD5)
+                } elsif ($feature eq 'md5') {
+			#only relevant if we have a secret
+                        $obj->secret('test');
+                        $obj->digester('MD5');
+                } elsif ($feature eq 'sha1') {
+			#only relevant if we have a secret
+                        $obj->secret('test');
+                        $obj->digester('SHA-256');
+                } elsif ($feature eq 'sha-256') {
+			#only relevant if we have a secret
+                        $obj->secret('test');
+                        $obj->digester('SHA-256');
                 } elsif ($feature eq 'compression') {
                         # use compression (Compress::Zlib)
                         $obj->compress(1);

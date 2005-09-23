@@ -17,14 +17,14 @@ require AutoLoader;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.29';
+$VERSION = '0.30';
 
 # Preloaded methods go here.
 {
   my %_internal;
   my %_fields = (
                   serializer => 'Data::Dumper',
-                  digester   => 'SHA1',
+                  digester   => 'SHA-256',
                   cipher     => 'Blowfish',
                   encoding   => 'hex',
                   compressor => 'Compress::Zlib',
@@ -80,7 +80,8 @@ $VERSION = '0.29';
     my $id = $$self;
     my $return = $_internal{$id}->{digester};
     if (@_) {
-      $_internal{$id}->{digester} = (shift);
+      my $value = (shift);
+      $_internal{$id}->{digester} = $value;
     }
     return $return;
   }
@@ -241,7 +242,7 @@ and encryption.
 
   $obj = Data::Serializer->new(
                          serializer => 'Data::Dumper',
-                         digester   => 'SHA1',
+                         digester   => 'SHA-256',
                          cipher     => 'Blowfish',
                          secret     => undef,
                          portable   => '1',
@@ -261,7 +262,7 @@ The default I<serializer> is C<Data::Dumper>
 
 =item
 
-The default I<digester> is C<SHA1>
+The default I<digester> is C<SHA-256>
 
 =item
 
@@ -610,7 +611,7 @@ sub _get_digest {
   my $self = (shift);
   my $input = (shift);
   my $digester = (shift);
-  my $ctx = Digest->$digester();
+  my $ctx = Digest->new($digester);
   $ctx->add($input);
   return $ctx->hexdigest;
 }

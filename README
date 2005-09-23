@@ -32,7 +32,7 @@ METHODS
 
               $obj = Data::Serializer->new(
                                      serializer => 'Data::Dumper',
-                                     digester   => 'SHA1',
+                                     digester   => 'SHA-256',
                                      cipher     => 'Blowfish',
                                      secret     => undef,
                                      portable   => '1',
@@ -45,7 +45,7 @@ METHODS
 
             *   The default *serializer* is "Data::Dumper"
 
-            *   The default *digester* is "SHA1"
+            *   The default *digester* is "SHA-256"
 
             *   The default *cipher* is "Blowfish"
 
@@ -166,6 +166,33 @@ METHODS
                                               options    => { dtd => 1, }
                                               ) or die "$!\n";
 
+        store - serialize data and write it to a file (or file handle)
+              $obj->store({a => [1,2,3],b => 5},$file, [$mode, $perm]);
+
+              or 
+
+              $obj->store({a => [1,2,3],b => 5},$fh);
+
+            Serializes the reference specified using the serialize method
+            and writes it out to the specified file or filehandle.
+
+            If a file path is specified you may specify an optional mode and
+            permission as the next two arguments. See IO::File for examples.
+
+            Trips an exception if it is unable to write to the specified
+            file.
+
+        retrieve - read data from file (or file handle) and return it after
+        deserialization
+              my $ref = $obj->retrieve($file);
+
+              or 
+
+              my $ref = $obj->retrieve($fh);
+
+            Reads first line of supplied file or filehandle and returns it
+            deserialized.
+
 TRANSIENCE
         Data::Serializer is aware of Tie::Transient. What this means is that
         you use Tie::Transient as normal, and when your object is
@@ -220,5 +247,6 @@ SEE ALSO
         Digest(3)
         Crypt(3)
         MIME::Base64(3)
+        IO::File(3)
         Tie::Transient(3)
 
