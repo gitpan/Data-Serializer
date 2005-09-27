@@ -17,7 +17,7 @@ require AutoLoader;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.31';
+$VERSION = '0.32';
 
 # Preloaded methods go here.
 {
@@ -63,7 +63,7 @@ $VERSION = '0.31';
     } else {
       $serializer = $_internal{$id}->{serializer};
     }
-    $_internal{$id}->{serializer_obj} = {options => $self->options()};
+    $_internal{$id}->{serializer_obj}->{options} = $self->options();
     bless $_internal{$id}->{serializer_obj}, "Data::Serializer::$serializer";
   }
   sub serializer {

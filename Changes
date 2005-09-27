@@ -1,5 +1,11 @@
 Revision history for Perl extension Data::Serializer
 
+0.32  Tue Sep 27 15:49:45 MDT 2005
+	- Fixed bug with declaring 'options' for an underlying serializer
+	
+		Thanks to rk1990@google.com for finding and supplying the
+		patch to fix it.	
+	
 0.31  Tue Sep 27 12:10:11 MDT 2005
 	- Fixed bug in the test suite introduced in .30
 
