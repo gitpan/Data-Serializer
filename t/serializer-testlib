@@ -177,9 +177,9 @@ $testrefs{selfrefarray}->[3]   = $testrefs{selfrefarray}->[1];
                 'encryption'     => [qw (Crypt::CBC Crypt::Blowfish)],
                 'compression'    => [qw (Compress::Zlib)],
                 'encoding'       => [qw (MIME::Base64)],
-                'md5'       => [qw (Digest::MD5)],
-                'sha1'     	 => [],
-                'sha-256'     	 => [],
+                'md5'       => [qw (Crypt::CBC Crypt::Blowfish Digest::MD5)],
+                'sha1'     	 => [qw (Crypt::CBC Crypt::Blowfish Digest::SHA1)],
+                'sha-256'     	 => [qw (Crypt::CBC Crypt::Blowfish Digest::SHA)],
                 );
 
 

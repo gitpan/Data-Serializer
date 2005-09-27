@@ -1,5 +1,10 @@
 Revision history for Perl extension Data::Serializer
 
+0.31  Tue Sep 27 12:10:11 MDT 2005
+	- Fixed bug in the test suite introduced in .30
+
+		Thanks to the cpan-testers for identifying this quickly
+
 0.30  Thu Sep 15 08:49:28 MDT 2005
 	- Modified call to Digest module to bring it up to current.
 	- Changed default digester to SHA-256
