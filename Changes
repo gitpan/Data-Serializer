@@ -1,5 +1,16 @@
 Revision history for Perl extension Data::Serializer
 
+0.34  Mon Oct 17 12:02:04 MDT 2005
+	- Fixed Serialized scalars from Data::Dumper
+  	  Previously would only serialize scalar references, now will serialize scalars too
+
+		Thanks to Chris <clotho@cpan.org> for reporting this via RT (https://rt.cpan.org/).  
+
+0.33  Wed Sep 28 16:37:50 MDT 2005
+	- Added support for Data::Taxi
+
+	- Minor documentation changes
+	
 0.32  Tue Sep 27 15:49:45 MDT 2005
 	- Fixed bug with declaring 'options' for an underlying serializer
 	
@@ -150,7 +161,6 @@ Revision history for Perl extension Data::Serializer
           want to force this as a dependency as encryption is a feature, not a 
           requirement for serializing data structures.
 	    Thanks to 'Automated Perl Test Account <perl_test@logicalchaos.org>'
-              (and of course the humans behind it :-) )
   
            
 0.14  Mon Jul  1 08:43:42 MDT 2002

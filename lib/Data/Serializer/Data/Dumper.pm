@@ -18,7 +18,7 @@ require AutoLoader;
 @EXPORT = qw(
 	
 );
-$VERSION = '0.03';
+$VERSION = '0.04';
 
 
 # Preloaded methods go here.
@@ -61,16 +61,11 @@ perl(1), Data::Serializer(3), Data::Dumper(3).
 # Create a Data::Dumper serializer object.
 #
 
-#
-# Serialize $val if it is a reference, or if it does begin with our magic
-# key string, since then at retrieval time we expect a Data::Dumper string.
-# Otherwise, return the scalar value.
-#
 sub serialize {
     my $self = shift;
     my ($val) = @_;
     return undef unless defined $val;
-    return $val unless ref($val);
+
     local $Data::Dumper::Indent = 0;
     local $Data::Dumper::Purity = 1;
     local $Data::Dumper::Terse = 1;
@@ -81,8 +76,6 @@ sub serialize {
 
 
 #
-# If the value is undefined or does not begin with our magic key string,
-# return it as-is. Otherwise, we need to recover the underlying data structure.
 #
 # Shamelessly copied from Data::Dumper::Serializer::Data::Dumper
 #	With apologies to relevant parties for not getting the 

@@ -8,6 +8,7 @@ lib/Data/Serializer/Storable.pm
 lib/Data/Serializer/FreezeThaw.pm
 lib/Data/Serializer/Data/Dumper.pm
 lib/Data/Serializer/Data/Denter.pm
+lib/Data/Serializer/Data/Taxi.pm
 lib/Data/Serializer/Config/General.pm
 lib/Data/Serializer/YAML.pm
 lib/Data/Serializer/PHP/Serialization.pm
@@ -24,6 +25,7 @@ t/01-06-YAML.t
 t/01-07-XML-Dumper.t
 t/01-08-PHP-Serialization.t
 t/01-09-XML-Simple.t
+t/01-10-Data-Taxi.t
 t/02-Raw.t
 t/03-Non-Portable.t
 t/04-Compression.t

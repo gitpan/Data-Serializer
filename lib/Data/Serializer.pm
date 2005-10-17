@@ -17,7 +17,7 @@ require AutoLoader;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.32';
+$VERSION = '0.34';
 
 # Preloaded methods go here.
 {
@@ -455,12 +455,30 @@ Neil Neely <F<neil@frii.net>>.
 
 Feature requests are certainly welcome. 
 
+=head1 BUGS
+
+Please report all bugs here:
+
+http://rt.cpan.org/NoAuth/Bugs.html?Dist=Data-Serializer
+
+=head1 TODO
+
+Phase out support for Tie::Transient
+
+Extend the persistent framework.  Perhaps  L<Persistent::Base(3)> framework
+would be useful to explore further.  Volunteers for putting this together
+would be welcome.
+
+
+
 =head1 COPYRIGHT
 
-Copyright (c) 2001-2004 Neil Neely.  All rights reserved.
+Copyright (c) 2001-2005 Neil Neely.  All rights reserved.
 
 This program is free software; you can redistribute it
 and/or modify it under the same terms as Perl itself.
+
+See http://www.perl.com/language/misc/Artistic.html
 
 =head1 ACKNOWLEDGEMENTS 
 
@@ -475,8 +493,7 @@ numerous suggestions and bug fixes.
 
 =head1 DEDICATION
 
-This module is dedicated to my beautiful wife Erica, 
-because a woman of such quality deserves a dedication.
+This module is dedicated to my beautiful wife Erica. 
 
 =head1 SEE ALSO
 
@@ -485,6 +502,8 @@ because a woman of such quality deserves a dedication.
 =item  L<Data::Dumper(3)>
 
 =item  L<Data::Denter(3)>
+
+=item  L<Data::Taxi(3)>
 
 =item L<Storable(3)>
 
@@ -501,6 +520,8 @@ because a woman of such quality deserves a dedication.
 =item L<Compress::Zlib(3)>
 
 =item L<Digest(3)>
+
+=item L<Digest::SHA(3)>
 
 =item L<Crypt(3)>
 

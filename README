@@ -214,11 +214,25 @@ AUTHOR
 
         Feature requests are certainly welcome.
 
+BUGS
+        Please report all bugs here:
+
+        http://rt.cpan.org/NoAuth/Bugs.html?Dist=Data-Serializer
+
+TODO
+        Phase out support for Tie::Transient
+
+        Extend the persistent framework. Perhaps Persistent::Base(3)
+        framework would be useful to explore further. Volunteers for putting
+        this together would be welcome.
+
 COPYRIGHT
-        Copyright (c) 2001-2004 Neil Neely. All rights reserved.
+        Copyright (c) 2001-2005 Neil Neely. All rights reserved.
 
         This program is free software; you can redistribute it and/or modify
         it under the same terms as Perl itself.
+
+        See http://www.perl.com/language/misc/Artistic.html
 
 ACKNOWLEDGEMENTS
         Gurusamy Sarathy and Raphael Manfredi for writing MLDBM, the module
@@ -231,12 +245,12 @@ ACKNOWLEDGEMENTS
         suggestions and bug fixes.
 
 DEDICATION
-        This module is dedicated to my beautiful wife Erica, because a woman
-        of such quality deserves a dedication.
+        This module is dedicated to my beautiful wife Erica.
 
 SEE ALSO
         Data::Dumper(3)
         Data::Denter(3)
+        Data::Taxi(3)
         Storable(3)
         FreezeThaw(3)
         Config::General(3)
@@ -245,6 +259,7 @@ SEE ALSO
         XML::Dumper(3)
         Compress::Zlib(3)
         Digest(3)
+        Digest::SHA(3)
         Crypt(3)
         MIME::Base64(3)
         IO::File(3)

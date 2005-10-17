@@ -31,6 +31,8 @@ $object_package = 'My::TestObj';
 %counts = (
                 simpleobject  => 2,
                 simplescalar  => 1,
+                trickyscalar  => 1,
+                simplescalarref  => 1,
                 simplearray   => 1,
                 complexarray  => 2,
                 selfrefarray   => 1,
@@ -43,7 +45,9 @@ $object_package = 'My::TestObj';
 %testrefs = (
 
    simpleobject    => My::TestObj->new(),
-   simplescalar    => \'pointless',
+   trickyscalar    => '{foo=>"bar"}',
+   simplescalar    => 'pointless',
+   simplescalarref    => \'pointless',
    simplehash    => { alpha => 1,
 	   	     beta  => 2 },
 
@@ -78,6 +82,18 @@ $testrefs{selfrefarray}->[3]   = $testrefs{selfrefarray}->[1];
                         'Data::Dumper'  => {
                                                 simpleobject  => $counts{simpleobject},
                                                 simplescalar  => $counts{simplescalar},
+                                                simplescalarref  => $counts{simplescalarref},
+                                                trickyscalar  => $counts{trickyscalar},
+                                                simplearray  => $counts{simplearray},
+                                                complexarray => $counts{complexarray},
+                                                selfrefarray  => $counts{selfrefarray},
+                                                simplehash   => $counts{simplehash},
+                                                complexhash  => $counts{complexhash},
+                                                selfrefhash  => $counts{selfrefhash},
+                                           },
+                        'Data::Taxi'  => {
+                                                simpleobject  => $counts{simpleobject},
+                                              #  simplescalar  => $counts{simplescalar},		#doesn't support this
                                                 simplearray  => $counts{simplearray},
                                                 complexarray => $counts{complexarray},
                                                 selfrefarray  => $counts{selfrefarray},
@@ -88,6 +104,8 @@ $testrefs{selfrefarray}->[3]   = $testrefs{selfrefarray}->[1];
                         'Data::Denter'  => {
                                                 simpleobject  => $counts{simpleobject},
                                                 simplescalar  => $counts{simplescalar},
+                                                simplescalarref  => $counts{simplescalarref},
+                                                trickyscalar  => $counts{trickyscalar},
                                                 simplearray  => $counts{simplearray},
                                                 complexarray => $counts{complexarray},
                                                 selfrefarray  => $counts{selfrefarray},
@@ -97,7 +115,9 @@ $testrefs{selfrefarray}->[3]   = $testrefs{selfrefarray}->[1];
                                            },
                         'Storable'      => {
                                                 simpleobject  => $counts{simpleobject},
-                                                simplescalar  => $counts{simplescalar},
+                                                simplescalar  => 0,	#Storable cannot serialize scalars
+                                                trickyscalar  => 0,	#Storable cannot serialize scalars
+                                                simplescalarref  => $counts{simplescalarref},
                                                 simplearray  => $counts{simplearray},
                                                 complexarray => $counts{complexarray},
                                                 selfrefarray  => $counts{selfrefarray},
@@ -108,6 +128,8 @@ $testrefs{selfrefarray}->[3]   = $testrefs{selfrefarray}->[1];
                         'FreezeThaw'    => {
                                                 simpleobject  => $counts{simpleobject},
                                                 simplescalar  => $counts{simplescalar},
+                                                simplescalarref  => $counts{simplescalarref},
+                                                trickyscalar  => $counts{trickyscalar},
                                                 simplearray  => $counts{simplearray},
                                                 complexarray => $counts{complexarray},
                                                 selfrefarray  => $counts{selfrefarray},
@@ -128,6 +150,8 @@ $testrefs{selfrefarray}->[3]   = $testrefs{selfrefarray}->[1];
                         'YAML'  => {
                                                 simpleobject  => $counts{simpleobject},
                                                 simplescalar  => $counts{simplescalar},
+                                                simplescalarref  => $counts{simplescalarref},
+                                                trickyscalar  => $counts{trickyscalar},
                                                 simplearray  => $counts{simplearray},
                                                 complexarray => $counts{complexarray},
                                                 selfrefarray  => $counts{selfrefarray},
@@ -138,6 +162,8 @@ $testrefs{selfrefarray}->[3]   = $testrefs{selfrefarray}->[1];
                         'XML::Dumper'   => {
                                                 simpleobject  => $counts{simpleobject},
                                                 simplescalar  => $counts{simplescalar},
+                                                simplescalarref  => $counts{simplescalarref},
+                                                trickyscalar  => $counts{trickyscalar},
                                                 simplearray  => $counts{simplearray},
                                                 complexarray => $counts{complexarray},
                                                 selfrefarray  => $counts{selfrefarray},
@@ -262,7 +288,11 @@ sub run_test {
           $thawed = $obj->deserialize($frozen);
         }
         if ($test eq 'simplescalar') {
-                $T->ok_eq(${$testrefs{$test}}, ${$thawed},'scalar');
+                $T->ok_eq($testrefs{$test}, $thawed,'scalar');
+        }elsif ($test eq 'trickyscalar') {
+                $T->ok_eq($testrefs{$test}, $thawed,'tricky scalar');
+        }elsif ($test eq 'simplescalarref') {
+                $T->ok_eq(${$testrefs{$test}}, ${$thawed},'simple scalar ref');
         }elsif ($test eq 'simpleobject') {
                 $T->ok_eq($testrefs{$test}->package_test(), $thawed->package_test,'object namespace');
                 $T->ok_eq($testrefs{$test}->data_test(), $thawed->data_test,'object data');
