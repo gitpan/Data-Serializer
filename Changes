@@ -1,5 +1,13 @@
 Revision history for Perl extension Data::Serializer
 
+0.35  Wed Noc 03 07:37:31 MDT 2005
+	- Anchored token extractor
+  	  When portable was disabled, binary type data could confuse the token extractor and break
+	  the ability to deserialize data.  
+
+		Thanks to Carl Eklof <carleklof@yahoo.com> for reporting this via RT (https://rt.cpan.org/).  
+	 	and also for suggesting the fix	
+
 0.34  Mon Oct 17 12:02:04 MDT 2005
 	- Fixed Serialized scalars from Data::Dumper
   	  Previously would only serialize scalar references, now will serialize scalars too

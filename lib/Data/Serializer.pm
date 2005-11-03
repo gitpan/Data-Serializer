@@ -17,7 +17,7 @@ require AutoLoader;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.34';
+$VERSION = '0.35';
 
 # Preloaded methods go here.
 {
@@ -561,7 +561,9 @@ sub _create_token {
 sub _get_token {
   my $self = (shift);
   my $line = (shift);
-  my ($token) =  $line =~ /\^([^\^]+?)\^/;
+  #Should be anchored to beginning
+  #my ($token) =  $line =~ /\^([^\^]+?)\^/;
+  my ($token) =  $line =~ /^\^([^\^]{1,120}?)\^/;
   return $token;
 }
 sub _extract_token {
@@ -572,7 +574,7 @@ sub _extract_token {
 sub _remove_token {
   my $self = (shift);
   my $line = (shift);
-  $line =~ s/\^[^\^]+?\^//;
+  $line =~ s/^\^[^\^]{1,120}?\^//;
   return $line;
 }
 sub _deserialize {
