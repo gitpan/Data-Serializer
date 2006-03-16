@@ -159,6 +159,42 @@ $testrefs{selfrefarray}->[3]   = $testrefs{selfrefarray}->[1];
                                                 complexhash  => $counts{complexhash},
                                                 selfrefhash  => $counts{selfrefhash},
                                            },
+                        'YAML::Syck'  => {
+                                                simpleobject  => $counts{simpleobject},
+                                                simplescalar  => $counts{simplescalar},
+                                                simplescalarref  => $counts{simplescalarref},
+                                                trickyscalar  => $counts{trickyscalar},
+                                                simplearray  => $counts{simplearray},
+                                                complexarray => $counts{complexarray},
+                                                selfrefarray  => $counts{selfrefarray},
+                                                simplehash   => $counts{simplehash},
+                                                complexhash  => $counts{complexhash},
+                                                selfrefhash  => $counts{selfrefhash},
+                                           },
+                        'JSON'  => {
+                                                simpleobject  => 0,	#JSON doesn't do objects
+                                                simplescalar  => 0,	#JSON doesn't do scalars
+                                                simplescalarref  => 0,	#JSON doesn't do scalars
+                                                trickyscalar  => 0,	#JSON doesn't do scalars
+                                                simplearray  => $counts{simplearray},
+                                                complexarray => $counts{complexarray},
+                                                selfrefarray  => $counts{selfrefarray},
+                                                simplehash   => $counts{simplehash},
+                                                complexhash  => $counts{complexhash},
+                                                selfrefhash  => $counts{selfrefhash},
+                                           },
+                        'JSON::Syck'  => {
+                                                simpleobject  => 0,	#JSON doesn't do objects
+                                                simplescalar  => 0,	#JSON doesn't do scalars
+                                                simplescalarref  => 0,	#JSON doesn't do scalars
+                                                trickyscalar  => 0,	#JSON doesn't do scalars
+                                                simplearray  => $counts{simplearray},
+                                                complexarray => $counts{complexarray},
+                                                selfrefarray  => $counts{selfrefarray},
+                                                simplehash   => $counts{simplehash},
+                                                complexhash  => $counts{complexhash},
+                                                selfrefhash  => $counts{selfrefhash},
+                                           },
                         'XML::Dumper'   => {
                                                 simpleobject  => $counts{simpleobject},
                                                 simplescalar  => $counts{simplescalar},
