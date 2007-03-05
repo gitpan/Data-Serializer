@@ -42,6 +42,19 @@ Data::Serializer::Config::General - Creates bridge between Data::Serializer and 
 
 Module is used internally to Data::Serializer
 
+=head1 METHODS
+                  
+=over 4
+                  
+=item B<serialize> - Wrapper to normalize serializer method name
+
+=item B<deserialize> - Wrapper to normalize deserializer method name
+
+=item B<options> - Pass options through to underlying serializer
+
+
+=back
+
 =head1 CAVEAT
 
 Base data structure to serialize must be a hash reference

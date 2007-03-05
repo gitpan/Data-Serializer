@@ -190,10 +190,12 @@ $testrefs{selfrefarray}->[3]   = $testrefs{selfrefarray}->[1];
                                                 trickyscalar  => 0,	#JSON doesn't do scalars
                                                 simplearray  => $counts{simplearray},
                                                 complexarray => $counts{complexarray},
-                                                selfrefarray  => $counts{selfrefarray},
                                                 simplehash   => $counts{simplehash},
                                                 complexhash  => $counts{complexhash},
-                                                selfrefhash  => $counts{selfrefhash},
+                                                #selfrefarray  => $counts{selfrefarray},
+                                                #selfrefhash  => $counts{selfrefhash},
+                                                selfrefarray  => 0,	#JSON no longer supports "circular references"
+                                                selfrefhash  => 0,	#JSON no longer supports "circular references"
                                            },
                         'XML::Dumper'   => {
                                                 simpleobject  => $counts{simpleobject},

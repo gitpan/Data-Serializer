@@ -8,6 +8,7 @@ use IO::File;
 require 5.004 ;
 require Exporter;
 require AutoLoader;
+use File::Slurp;
 
 @ISA = qw(Exporter AutoLoader);
 # Items to export into callers namespace by default. Note: do not export
@@ -17,7 +18,7 @@ require AutoLoader;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.36';
+$VERSION = '0.38';
 
 # Preloaded methods go here.
 {
@@ -48,7 +49,7 @@ $VERSION = '0.36';
     $_internal{$dataref->{_key}} = $dataref;
     my $self = \$dataref->{_key};
     bless $self, $class;
-    $self->transient(1) if (eval "require Tie::Transient");
+    $self->_transient(1) if (eval "require Tie::Transient");
     
     #load serializer module if it is defined
     return $self;
@@ -121,7 +122,7 @@ $VERSION = '0.36';
     }
     return $return;
   }
-  sub transient {
+  sub _transient {
     my $self = (shift);
     my $id = $$self;
     my $return = $_internal{$id}->{transient};
@@ -231,6 +232,8 @@ and encryption.
 
 =item  Please see L<Data::Serializer::Cookbook(3)>
 
+=back
+
 =head1 METHODS
 
 =over 4
@@ -283,6 +286,10 @@ The default I<encoding> is C<hex>
 =item
 
 The default I<compress> is C<0>
+
+=item
+
+The default I<compressor> is C<Compress::Zlib>
 
 =item
 
@@ -371,6 +378,11 @@ Utilizes Crypt::CBC and can support any cipher method that it supports.
 
 Uses Digest so can support any digesting method that it supports.  Digesting
 function is used internally by the encryption routine as part of data verification.
+
+=item B<compressor> - changes compresing module
+
+This method is included for possible future inclusion of alternate compression method
+Currently Compress::Zlib is the only supported compressor.
 
 =item B<encoding> - change encoding method
 
@@ -473,7 +485,7 @@ would be welcome.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2001-2005 Neil Neely.  All rights reserved.
+Copyright (c) 2001-2006 Neil Neely.  All rights reserved.
 
 This program is free software; you can redistribute it
 and/or modify it under the same terms as Perl itself.
@@ -513,9 +525,15 @@ This module is dedicated to my beautiful wife Erica.
 
 =item L<YAML(3)>
 
+=item L<YAML::Syck(3)>
+
 =item L<PHP::Serialization(3)>
 
 =item L<XML::Dumper(3)>
+
+=item L<JSON(3)>
+
+=item L<JSON::Syck(3)>
 
 =item L<Compress::Zlib(3)>
 
@@ -673,9 +691,9 @@ sub serialize {
 
   #define serializer for token
   $serializer = $self->serializer;
-  &Tie::Transient::hide_transients() if ($self->transient());
+  &Tie::Transient::hide_transients() if ($self->_transient());
   my $value = $self->_serialize(\@_,$serializer);
-  &Tie::Transient::show_transients() if ($self->transient());
+  &Tie::Transient::show_transients() if ($self->_transient());
 
   if ($self->compress) {
     $compressor = $self->compressor;
@@ -816,9 +834,9 @@ sub deserialize {
     $value = $self->_decompress($value);
   }
   #we always deserialize no matter what.
-  &Tie::Transient::show_transients() if ($self->transient());
+  &Tie::Transient::show_transients() if ($self->_transient());
   my @return = $self->_deserialize($value,$serializer);
-  &Tie::Transient::hide_transients() if ($self->transient());
+  &Tie::Transient::hide_transients() if ($self->_transient());
   return wantarray ? @return : $return[0];
 }
 

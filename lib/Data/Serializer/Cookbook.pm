@@ -1,5 +1,8 @@
 package Data::Serializer::Cookbook;
 
+
+use warnings;
+use strict;
 use vars ('$VERSION');
 
 $VERSION = '0.02';

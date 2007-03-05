@@ -60,11 +60,13 @@ perl(1), Data::Serializer(3), Data::Dumper(3).
 sub serialize {
 	my $self = $_[0];
 	my $ret;
-	if ($self->{portable}) {
-		$ret = Storable::nfreeze($_[1]);
-	} else {
-		$ret = Storable::freeze($_[1]);
-	}
+	$ret = Storable::nfreeze($_[1]);
+	#using network byte order makes sense to always do, under all circumstances to make it platform neutral
+	#if ($self->{portable}) {
+	#	$ret = Storable::nfreeze($_[1]);
+	#} else {
+	#	$ret = Storable::freeze($_[1]);
+	#}
 	defined($ret) ? $ret : undef;
 }
 
