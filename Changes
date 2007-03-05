@@ -1,5 +1,8 @@
 Revision history for Perl extension Data::Serializer
 
+0.39  Mon Mar  5 10:39:00 MST 2007
+	- Left "use File::Slurp" inside of Serializer.pm from some testing, removed this needless dependency
+
 0.38  Mon Mar  5 09:15:00 MST 2007
 	- Modified Data::Serializer::Storable to always use nfreeze, whether portable flag is set or not
 		Thanks to David Sepiashvili <arribapor@msn.com> for pointing out the original logic wasn't very useful

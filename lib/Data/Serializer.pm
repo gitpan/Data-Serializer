@@ -8,7 +8,6 @@ use IO::File;
 require 5.004 ;
 require Exporter;
 require AutoLoader;
-use File::Slurp;
 
 @ISA = qw(Exporter AutoLoader);
 # Items to export into callers namespace by default. Note: do not export
@@ -18,7 +17,7 @@ use File::Slurp;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.38';
+$VERSION = '0.39';
 
 # Preloaded methods go here.
 {
