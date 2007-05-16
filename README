@@ -212,9 +212,11 @@ TRANSIENCE
     With perl attributes in 5.8, this should probably be deprecated.
 
 AUTHOR
-    Neil Neely <neil@frii.net>.
+    Neil Neely <neil@neely.cx>.
 
     Feature requests are certainly welcome.
+
+    http://neil-neely.blogspot.com/
 
 BUGS
     Please report all bugs here:

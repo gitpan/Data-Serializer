@@ -41,7 +41,7 @@ Module is used internally to Data::Serializer
 
 =head1 AUTHOR
 
-Neil Neely <neil@frii.net>
+Neil Neely <neil@neely.cx>
 
 =head1 COPYRIGHT
 

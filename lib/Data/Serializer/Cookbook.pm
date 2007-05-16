@@ -140,7 +140,7 @@ passed over a link since it last ran.
 
 =head1 AUTHOR
 
-Neil Neely <F<neil@frii.net>>.
+Neil Neely <F<neil@neely.cx>>.
 
 =head1 COPYRIGHT
 

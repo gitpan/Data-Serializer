@@ -7,7 +7,7 @@ WriteMakefile(
     'NAME'		=> 'Data::Serializer',
     'DISTNAME'		=> 'Data-Serializer',
     'VERSION_FROM'	=> 'lib/Data/Serializer.pm', # finds $VERSION
-    'AUTHOR'		=> 'Neil Neely (neil@frii.net)',
+    'AUTHOR'		=> 'Neil Neely (neil@neely.cx)',
     'PREREQ_PM'		=> 	{
 	                 	  'IO::File' => 0,
 	                 	  'Digest::SHA' => 0,

@@ -1,5 +1,8 @@
 Revision history for Perl extension Data::Serializer
 
+0.40  Wed May  16 2007
+        - Updated contact information to be neil@neely.cx, this is a purely cosmetic change
+
 0.39  Mon Mar  5 10:39:00 MST 2007
 	- Left "use File::Slurp" inside of Serializer.pm from some testing, removed this needless dependency
 

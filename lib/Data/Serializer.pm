@@ -17,7 +17,7 @@ require AutoLoader;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.39';
+$VERSION = '0.40';
 
 # Preloaded methods go here.
 {
@@ -462,9 +462,11 @@ With perl attributes in 5.8, this should probably be deprecated.
 
 =head1 AUTHOR
 
-Neil Neely <F<neil@frii.net>>.
+Neil Neely <F<neil@neely.cx>>.
 
 Feature requests are certainly welcome. 
+
+http://neil-neely.blogspot.com/
 
 =head1 BUGS
 

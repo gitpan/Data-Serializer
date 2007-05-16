@@ -45,7 +45,7 @@ prior to serializing the data.   See XML::Dumper(3) for details.
 
 =head1 AUTHOR
  
-Neil Neely <neil@frii.net>
+Neil Neely <neil@neely.cx>
     
 =head1 COPYRIGHT
  
