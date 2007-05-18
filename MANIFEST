@@ -42,5 +42,8 @@ t/07-02-SHA1-Digest.t
 t/07-03-SHA-256-Digest.t
 t/08-Store-Retrieve.t
 t/09-Feature-Combos.t
+t/10-01-Pod.t
+t/10-02-Pod-Coverage.t
 t/serializer-testlib
+examples/README
 META.yml                                 Module meta-data (added by MakeMaker)

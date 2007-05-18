@@ -8,10 +8,12 @@ WriteMakefile(
     'DISTNAME'		=> 'Data-Serializer',
     'VERSION_FROM'	=> 'lib/Data/Serializer.pm', # finds $VERSION
     'AUTHOR'		=> 'Neil Neely (neil@neely.cx)',
+    'LICENSE'		=> 'perl',
     'PREREQ_PM'		=> 	{
 	                 	  'IO::File' => 0,
 	                 	  'Digest::SHA' => 0,
 	                 	  'Data::Dumper' => 2.08,
+	                 	  'Test::More' => 0,
        	               		},
     'dist'      => {'COMPRESS'=>'gzip -9f', 'SUFFIX' => 'gz',
                     'ZIP'=>'/usr/bin/zip','ZIPFLAGS'=>'-rl'}

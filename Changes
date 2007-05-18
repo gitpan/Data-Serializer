@@ -1,5 +1,12 @@
 Revision history for Perl extension Data::Serializer
 
+0.41  Wed May  17 2007
+	- Bowing to peer pressure and adding in the Test::Pod stuff in production, this means adding a prereq of Test::More
+	- Updated Data::Serializer::Cookbook
+	- Added an examples/ dir to the distribution
+	- put a copy of the Cookbook in the examples dir via pod2text as README
+	- Would be happy to add user submitted examples (send to neil@neely.cx)
+
 0.40  Wed May  16 2007
         - Updated contact information to be neil@neely.cx, this is a purely cosmetic change
 

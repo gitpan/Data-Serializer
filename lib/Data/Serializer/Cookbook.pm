@@ -144,45 +144,17 @@ Neil Neely <F<neil@neely.cx>>.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2001-2004 Neil Neely.  All rights reserved.
+Copyright (c) 2001-2007 Neil Neely.  All rights reserved.
 
 This program is free software; you can redistribute it
 and/or modify it under the same terms as Perl itself.
 
-=head1 DEDICATION
-
-This module is dedicated to my beautiful wife Erica,
-because a woman of such quality deserves a dedication.
 
 =head1 SEE ALSO
 
 =over 4
 
-=item  L<Data::Dumper(3)>
-
-=item  L<Data::Denter(3)>
-
-=item L<Storable(3)>
-
-=item L<FreezeThaw(3)>
-
-=item L<Config::General(3)>
-
-=item L<YAML(3)>
-
-=item L<PHP::Serialization(3)>
-
-=item L<XML::Dumper(3)>
-
-=item L<Compress::Zlib(3)>
-
-=item L<Digest(3)>
-
-=item L<Crypt(3)>
-
-=item L<MIME::Base64(3)>
-
-=item L<Tie::Transient(3)>
+=item  L<Data::Serializer(3)>
 
 =back
 
