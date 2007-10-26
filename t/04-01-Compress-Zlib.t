@@ -23,7 +23,7 @@ foreach my $serializer (keys %serializers) {
 
 $T->msg("No serializers found!!") unless (@serializers);
 
-my @types = qw(compression);
+my @types = qw(compresszlib);
 
 find_features($T,@types);
 

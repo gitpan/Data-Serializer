@@ -239,7 +239,8 @@ $testrefs{selfrefarray}->[3]   = $testrefs{selfrefarray}->[1];
                 'cgopt'     	 => [],
                 'xmldumpopt'   	 => [],
                 'encryption'     => [qw (Crypt::CBC Crypt::Blowfish)],
-                'compression'    => [qw (Compress::Zlib)],
+                'compresszlib'    => [qw (Compress::Zlib)],
+                'compressppmd'    => [qw (Compress::PPMd)],
                 'encoding'       => [qw (MIME::Base64)],
                 'md5'       => [qw (Crypt::CBC Crypt::Blowfish Digest::MD5)],
                 'sha1'     	 => [qw (Crypt::CBC Crypt::Blowfish Digest::SHA1)],
@@ -272,9 +273,14 @@ sub run_test {
 			#only relevant if we have a secret
                         $obj->secret('test');
                         $obj->digester('SHA-256');
-                } elsif ($feature eq 'compression') {
-                        # use compression (Compress::Zlib)
+                } elsif ($feature eq 'compresszlib') {
+                        # use compression 
                         $obj->compress(1);
+                        $obj->compressor("Compress::Zlib");
+                } elsif ($feature eq 'compressppmd') {
+                        # use compression 
+                        $obj->compress(1);
+                        $obj->compressor("Compress::PPMd");
                 } elsif ($feature eq 'encoding') {
                         # test alternate encoding
                         $obj->encoding('b64');

@@ -34,7 +34,8 @@ t/01-12-JSON.t
 t/01-13-JSON-Syck.t
 t/02-Raw.t
 t/03-Non-Portable.t
-t/04-Compression.t
+t/04-01-Compress-Zlib.t
+t/04-02-Compress-PPMd.t
 t/05-Encryption.t
 t/06-B64-Encoding.t
 t/07-01-MD5-Digest.t

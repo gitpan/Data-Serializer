@@ -1,5 +1,10 @@
 Revision history for Perl extension Data::Serializer
 
+0.42  Fri Oct  26 2007
+	- Added support for Compress::PPMd
+		Thanks to Strzelecki Łukasz <strzelecki@rswsystems.pl> for recommending the addition
+		as well as supplying relevant code samples.
+
 0.41  Wed May  17 2007
 	- Bowing to peer pressure and adding in the Test::Pod stuff in production, this means adding a prereq of Test::More
 	- Updated Data::Serializer::Cookbook

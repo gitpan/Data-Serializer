@@ -134,9 +134,7 @@ METHODS
         part of data verification.
 
     compressor - changes compresing module
-        This method is included for possible future inclusion of alternate
-        compression method Currently Compress::Zlib is the only supported
-        compressor.
+        Currently Compress::Zlib and Compress::PPMd are the only options
 
     encoding - change encoding method
         Encodes data structure in ascii friendly manner. Currently the only
@@ -230,11 +228,12 @@ TODO
     would be useful to explore further. Volunteers for putting this together
     would be welcome.
 
-COPYRIGHT
-    Copyright (c) 2001-2006 Neil Neely. All rights reserved.
+COPYRIGHT AND LICENSE
+    Copyright (c) 2001-2007 Neil Neely. All rights reserved.
 
-    This program is free software; you can redistribute it and/or modify it
-    under the same terms as Perl itself.
+    This library is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself, either Perl version 5.8.2 or, at
+    your option, any later version of Perl 5 you may have available.
 
     See http://www.perl.com/language/misc/Artistic.html
 

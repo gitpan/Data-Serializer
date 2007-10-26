@@ -17,7 +17,7 @@ require AutoLoader;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.41';
+$VERSION = '0.42';
 
 # Preloaded methods go here.
 {
@@ -380,8 +380,7 @@ function is used internally by the encryption routine as part of data verificati
 
 =item B<compressor> - changes compresing module
 
-This method is included for possible future inclusion of alternate compression method
-Currently Compress::Zlib is the only supported compressor.
+Currently Compress::Zlib and Compress::PPMd are the only options
 
 =item B<encoding> - change encoding method
 
@@ -484,12 +483,14 @@ would be welcome.
 
 
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2001-2006 Neil Neely.  All rights reserved.
+Copyright (c) 2001-2007 Neil Neely.  All rights reserved.
 
-This program is free software; you can redistribute it
-and/or modify it under the same terms as Perl itself.
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.2 or,
+at your option, any later version of Perl 5 you may have available.
+
 
 See http://www.perl.com/language/misc/Artistic.html
 
@@ -538,6 +539,8 @@ This module is dedicated to my beautiful wife Erica.
 
 =item L<Compress::Zlib(3)>
 
+=item L<Compress::PPMd(3)>
+
 =item L<Digest(3)>
 
 =item L<Digest::SHA(3)>
@@ -565,12 +568,22 @@ sub _serialize {
 sub _compress {
   my $self = (shift);
   $self->_module_loader($self->compressor);	
-  return Compress::Zlib::compress((shift));
+  if ($self->compressor eq 'Compress::Zlib') {
+    return Compress::Zlib::compress((shift));
+  } elsif ($self->compressor eq 'Compress::PPMd') {
+    my $compressor = Compress::PPMd::Encoder->new();
+    return $compressor->encode((shift));
+  }
 }
 sub _decompress {
   my $self = (shift);
   $self->_module_loader($self->compressor);	
-  return Compress::Zlib::uncompress((shift));
+  if ($self->compressor eq 'Compress::Zlib') {
+    return Compress::Zlib::uncompress((shift));
+  } elsif ($self->compressor eq 'Compress::PPMd') {
+    my $compressor = Compress::PPMd::Decoder->new();
+    return $compressor->decode((shift));
+  }
 }
 
 sub _create_token {

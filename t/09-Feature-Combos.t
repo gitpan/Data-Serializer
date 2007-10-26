@@ -23,7 +23,7 @@ foreach my $serializer (keys %serializers) {
 
 $T->msg("No serializers found!!") unless (@serializers);
 
-my @types = qw(raw basic non-portable encoding encryption compression storage);
+my @types = qw(raw basic non-portable encoding encryption compresszlib compressppmd storage);
 
 find_features($T,@types);
 
@@ -32,23 +32,39 @@ my @feature_combos;
 push(@feature_combos, "non-portable encryption") 
 	if ($found_type{'encryption'});
 
-push(@feature_combos, "non-portable compression") 
-	if ($found_type{'compression'});
+push(@feature_combos, "non-portable compresszlib") 
+	if ($found_type{'compresszlib'});
 
-if ($found_type{'compression'} && $found_type{'encryption'}) {
-  push(@feature_combos, "encryption compression");
-  push(@feature_combos, "non-portable encryption compression");
+push(@feature_combos, "non-portable compressppmd") 
+	if ($found_type{'compressppmd'});
+
+if ($found_type{'compresszlib'} && $found_type{'encryption'}) {
+  push(@feature_combos, "encryption compresszlib");
+  push(@feature_combos, "non-portable encryption compresszlib");
 }
 
-push(@feature_combos, "encoding compression")
-	if ($found_type{'compression'} && $found_type{'encoding'});
+if ($found_type{'compressppmd'} && $found_type{'encryption'}) {
+  push(@feature_combos, "encryption compressppmd");
+  push(@feature_combos, "non-portable encryption compressppmd");
+}
 
-push(@feature_combos, "encoding encryption compression")
-	if ($found_type{'compression'} && $found_type{'encryption'} && $found_type{'encoding'});
+push(@feature_combos, "encoding compresszlib")
+	if ($found_type{'compresszlib'} && $found_type{'encoding'});
 
-push(@feature_combos, "encoding encryption compression storage")
-	if ($found_type{'compression'} && $found_type{'encryption'} && $found_type{'encoding'} && $found_type{'storage'});
+push(@feature_combos, "encoding compressppmd")
+	if ($found_type{'compressppmd'} && $found_type{'encoding'});
 
+push(@feature_combos, "encoding encryption compresszlib")
+	if ($found_type{'compresszlib'} && $found_type{'encryption'} && $found_type{'encoding'});
+
+push(@feature_combos, "encoding encryption compressppmd")
+	if ($found_type{'compressppmd'} && $found_type{'encryption'} && $found_type{'encoding'});
+
+push(@feature_combos, "encoding encryption compresszlib storage")
+	if ($found_type{'compresszlib'} && $found_type{'encryption'} && $found_type{'encoding'} && $found_type{'storage'});
+
+push(@feature_combos, "encoding encryption compressppmd storage")
+	if ($found_type{'compressppmd'} && $found_type{'encryption'} && $found_type{'encoding'} && $found_type{'storage'});
 
 my $testcount = 0;
 
