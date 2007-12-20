@@ -1,29 +1,25 @@
 package Data::Serializer::JSON;
 BEGIN { @Data::Serializer::JSON::ISA = qw(Data::Serializer) }
 
+use warnings;
 use strict;
 use JSON;
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
+use vars qw($VERSION @ISA);
 
-require Exporter;
-require AutoLoader;
+$VERSION = '0.02';
 
-@ISA = qw(Exporter AutoLoader);
-@EXPORT = qw(
+sub serialize {
+	return JSON->VERSION < 2 ? JSON->new->objToJson($_[1]) : JSON->new->encode($_[1]);
+}
 
-);
-$VERSION = '0.01';
+sub deserialize {
+	return JSON->VERSION < 2 ? JSON->new->jsonToObj($_[1]) : JSON->new->decode($_[1]);
+}
 
 1;
 __END__
 
-sub serialize {
-    return JSON->new->objToJson($_[1]);
-}
 
-sub deserialize {
-    return JSON->new->jsonToObj($_[1]);
-}
 
 =head1 NAME
 
@@ -49,6 +45,8 @@ Module is used internally to Data::Serializer
 =head1 AUTHOR
 
 Naoya Ito <naoya@bloghackers.net>
+
+Patch to JSON 2 by Makamaka <makamaka@donzoko.net>
 
 =head1 COPYRIGHT
 

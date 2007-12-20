@@ -1,5 +1,6 @@
 package Data::Serializer;
 
+use warnings;
 use strict;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
@@ -17,7 +18,7 @@ require AutoLoader;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.42';
+$VERSION = '0.43';
 
 # Preloaded methods go here.
 {

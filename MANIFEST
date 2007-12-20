@@ -2,6 +2,7 @@ Changes
 MANIFEST
 README
 INSTALL
+Build.PL
 Makefile.PL
 lib/Data/Serializer.pm
 lib/Data/Serializer/Storable.pm

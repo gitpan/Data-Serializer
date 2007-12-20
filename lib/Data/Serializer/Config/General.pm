@@ -1,18 +1,15 @@
 package Data::Serializer::Config::General;
 BEGIN { @Data::Serializer::Config::General::ISA = qw(Data::Serializer) }
+use warnings;
 use strict;
 use Config::General;
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
+use vars qw($VERSION @ISA);
 
-require Exporter;
-require AutoLoader;
- 
-@ISA = qw(Exporter AutoLoader);
-@EXPORT = qw();
-$VERSION = '0.01';
+$VERSION = '0.02';
 sub options {
   return (shift)->{options};
 }
+
 sub serialize {
   my $self = (shift);
   my $ref = (shift);

@@ -1,32 +1,32 @@
 package Data::Serializer::XML::Dumper;
 BEGIN { @Data::Serializer::XML::Dumper::ISA = qw(Data::Serializer) }
 
-
+use warnings;
 use strict;
 use XML::Dumper qw(); 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
+use vars qw($VERSION @ISA);
 
-require Exporter;
-require AutoLoader;
-
-@ISA = qw(Exporter AutoLoader);
-# Items to export into callers namespace by default. Note: do not export
-# names by default without a very good reason. Use EXPORT_OK instead.
-# Do not simply export all your public functions/methods/constants.
-@EXPORT = qw(
-	
-);
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 
 
-# Preloaded methods go here.
+sub serialize {
+    my $self = (shift);
+    my $xml = new XML::Dumper;
+    if (defined $self->{options} && $self->{options}->{dtd}) {
+      $xml->dtd;
+    }
+    return $xml->pl2xml( (shift) );
+}
 
-# Autoload methods go after =cut, and are processed by the autosplit program.
+sub deserialize {
+    my $xml = new XML::Dumper;
+    return $xml->xml2pl($_[1]);
+}
 
 1;
 __END__
-# Below is the stub of documentation for your module. You better edit it!
+#
 
 =head1 NAME
 
@@ -42,6 +42,15 @@ Module is used internally to Data::Serializer
 
 The only option currently supported is B<dtd>.  This just calls the dtd method of XML::Dumper
 prior to serializing the data.   See XML::Dumper(3) for details.
+
+
+=over 4
+
+=item B<serialize> - Wrapper to normalize serializer method name
+
+=item B<deserialize> - Wrapper to normalize deserializer method name
+
+=back
 
 =head1 AUTHOR
  
@@ -59,17 +68,4 @@ perl(1), Data::Serializer(3), XML::Dumper(3).
 
 =cut
 
-sub serialize {
-    my $self = (shift);
-    my $xml = new XML::Dumper;
-    if (defined $self->{options} && $self->{options}->{dtd}) {
-      $xml->dtd;
-    }
-    return $xml->pl2xml( (shift) );
-}
-
-sub deserialize {
-    my $xml = new XML::Dumper;
-    return $xml->xml2pl($_[1]);
-}
 

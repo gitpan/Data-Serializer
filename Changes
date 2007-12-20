@@ -1,5 +1,15 @@
 Revision history for Perl extension Data::Serializer
 
+0.43  Wed Dec  19 2007
+	- Converted to utilizing Module::Build to support recommended options
+	- Added recommended module list
+	- Added build_requires list 
+	- Added use warnings calls to all modules
+	- Patched to support JSON 2 by Makamaka <makamaka@donzoko.net> (Thanks Makamaka!)
+	- Removed Autoloader from sub-modules 
+		-sub modules are tiny two method affairs that really don't need autosplit - and Module::Build makes it a pain
+	- Removed 'require Exporter' from sub modules, as they weren't using them in anyway (just cleaning up)
+
 0.42  Fri Oct  26 2007
 	- Added support for Compress::PPMd
 		Thanks to Strzelecki Łukasz <strzelecki@rswsystems.pl> for recommending the addition

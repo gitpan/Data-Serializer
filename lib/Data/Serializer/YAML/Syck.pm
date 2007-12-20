@@ -1,18 +1,20 @@
 package Data::Serializer::YAML::Syck;
 BEGIN { @Data::Serializer::YAML::Syck::ISA = qw(Data::Serializer) }
 
+use warnings;
 use strict;
 use YAML::Syck;
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
+use vars qw($VERSION @ISA);
 
-require Exporter;
-require AutoLoader;
+$VERSION = '0.02';
 
-@ISA = qw(Exporter AutoLoader);
-@EXPORT = qw(
-	
-);
-$VERSION = '0.01';
+sub serialize {
+    return YAML::Syck::Dump($_[1]);
+}
+
+sub deserialize {
+    return YAML::Syck::Load($_[1]);
+}
 
 1;
 __END__
@@ -29,6 +31,15 @@ Data::Serializer::YAML::Syck - Creates bridge between Data::Serializer and YAML:
 
 Module is used internally to Data::Serializer
 
+
+=over 4
+
+=item B<serialize> - Wrapper to normalize serializer method name
+
+=item B<deserialize> - Wrapper to normalize deserializer method name
+
+=back
+
 =head1 AUTHOR
 
 Naoya Ito <naoya@bloghackers.net>
@@ -44,10 +55,3 @@ perl(1), Data::Serializer(3), YAML::Syck(3).
 
 =cut
 
-sub serialize {
-    return YAML::Syck::Dump($_[1]);
-}
-
-sub deserialize {
-    return YAML::Syck::Load($_[1]);
-}
