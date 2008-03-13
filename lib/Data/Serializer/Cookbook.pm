@@ -5,7 +5,7 @@ use warnings;
 use strict;
 use vars ('$VERSION');
 
-$VERSION = '0.03';
+$VERSION = '0.04';
 
 1;
 
@@ -82,9 +82,11 @@ to be able to process data serialized by XML::Dumper.
 
 =head2 Solution
 
-  $serializer->serializer('XML::Dumper');
+  my $xml_serializer = Data::Serializer->(serializer => 'XML::Dumper', raw => 1);
 
-  my $hash_ref = $serializer->raw_deserialize($xml_data);
+  my $hash_ref = $serializer->deserialize($xml_data);
+
+Note: the raw_deserialize method can be used as well, but the above approach is preferred.
 
 =head1 You want to write serialized data in a form understood outside of Data::Serializer
 
@@ -95,9 +97,11 @@ For our example we will be exporting data using XML::Dumper format.
 
 =head2 Solution
 
-  $serializer->serializer('XML::Dumper');
+  my $xml_serializer = Data::Serializer->(serializer => 'XML::Dumper', raw => 1);
 
-  my $xml_data = $serializer->raw_serialize($hash_ref);
+  my $xml_data = $serializer->serialize($hash_ref);
+
+Note: the raw_serialize method can be used as well, but the above approach is preferred.
 
 =head1 You want to convert data between two different serializers native formats
 
@@ -106,13 +110,13 @@ programs.
 
 =head2 Solution
 
-  my $xml_serializer = Data::Serializer->(serializer => 'XML::Dumper');
+  my $xml_serializer = Data::Serializer->(serializer => 'XML::Dumper', raw => 1);
 
-  my $php_serializer = Data::Serializer->(serializer => 'PHP::Serialization');
+  my $php_serializer = Data::Serializer->(serializer => 'PHP::Serialization', raw => 1);
 
-  my $hash_ref = $php_serializer->raw_deserialize($php_data);
+  my $hash_ref = $php_serializer->deserialize($php_data);
 
-  my $xml_data = $xml_serializer->raw_serialize($hash_ref); 
+  my $xml_data = $xml_serializer->serialize($hash_ref); 
 
 =head1  Keeping data persistent between executions of a program.
 
@@ -144,7 +148,7 @@ Neil Neely <F<neil@neely.cx>>.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2001-2007 Neil Neely.  All rights reserved.
+Copyright (c) 2001-2008 Neil Neely.  All rights reserved.
 
 This program is free software; you can redistribute it
 and/or modify it under the same terms as Perl itself.

@@ -1,7 +1,9 @@
 Changes
 MANIFEST
+MANIFEST.SKIP
 README
 INSTALL
+#SIGNATURE
 Build.PL
 Makefile.PL
 lib/Data/Serializer.pm
@@ -20,6 +22,8 @@ lib/Data/Serializer/Cookbook.pm
 lib/Data/Serializer/JSON.pm
 lib/Data/Serializer/JSON/Syck.pm
 t/ExtUtils/TBone.pm
+t/00-01-Signature.t
+t/00-02-Kwalitee.t
 t/01-01-Data-Dumper.t
 t/01-02-Data-Denter.t
 t/01-03-Storable.t

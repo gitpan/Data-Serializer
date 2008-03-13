@@ -1,5 +1,20 @@
 Revision history for Perl extension Data::Serializer
 
+0.44  Thu Dec  13 2008
+	- Added 'raw' flag to constructor, allows for more convenient
+	  raw access to underlying serializers
+	- retrieve altered to read in full contents of file specified, this change could be disruptive
+	  if you were using retrieve in a non-standard way, so be aware of it.
+	- store and retrieve when the raw flag is set will do what you would expect
+          and store and retrieve serialized data from files in their raw underlying
+          serializer format with no Data::Serializer markup included
+	- Removed last usage of Autoloader (decided it isn't worth the irritation of keeping it)
+	- Updated Data::Serializer::Cookbook to reference the raw flag and de-emphasis the use of raw_ methods.
+
+		Thanks to Charles Gowing <charles.gowing@novainfo.com> for noticing that retrieve with portable set to 0 was quite
+                broken.  That led to revisiting the 'raw' concept and improving it.  Now does work with portable set to 0 (using raw
+		set to a true value is likely a better choice however).
+
 0.43  Wed Dec  19 2007
 	- Converted to utilizing Module::Build to support recommended options
 	- Added recommended module list

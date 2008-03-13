@@ -8,9 +8,10 @@ use Carp;
 use IO::File;
 require 5.004 ;
 require Exporter;
-require AutoLoader;
+#require AutoLoader;
 
-@ISA = qw(Exporter AutoLoader);
+#@ISA = qw(Exporter AutoLoader);
+@ISA = qw(Exporter);
 # Items to export into callers namespace by default. Note: do not export
 # names by default without a very good reason. Use EXPORT_OK instead.
 # Do not simply export all your public functions/methods/constants.
@@ -18,7 +19,7 @@ require AutoLoader;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.43';
+$VERSION = '0.44';
 
 # Preloaded methods go here.
 {
@@ -32,6 +33,7 @@ $VERSION = '0.43';
                   secret     => undef,
                   portable   => '1',
                   compress   => '0',
+                  raw        => '0',
                   options    => {},
                  transient   => '0',
             serializer_token => '1',
@@ -158,6 +160,15 @@ $VERSION = '0.43';
     }
     return $return;
   }
+  sub raw {
+    my $self = (shift);
+    my $id = $$self;
+    my $return = $_internal{$id}->{raw};
+    if (@_) {
+      $_internal{$id}->{raw} = (shift);
+    }
+    return $return;
+  }
   sub serializer_token {
     my $self = (shift);
     my $id = $$self;
@@ -192,10 +203,6 @@ $VERSION = '0.43';
 #END of public functions, all following functions are for internal use only
 
 
-
-# Autoload methods go after =cut, and are processed by the autosplit program.
-1;
-__END__
 #Documentation follows
 
 =head1 NAME
@@ -358,6 +365,10 @@ Aids in the portability of serialized data.
 Compresses serialized data.  Default is not to use it.  Will compress if set to a true value
   $obj->compress(1);
 
+=item B<raw> - all calls to serializer and deserializer will automatically use raw mode
+
+Setting this to a true value will force serializer and deserializer to work in raw mode 
+(see raw_serializer and raw_deserializer).  The default is for this to be off.
 
 =item B<serializer> - change the serializer
 
@@ -486,7 +497,7 @@ would be welcome.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2001-2007 Neil Neely.  All rights reserved.
+Copyright (c) 2001-2008 Neil Neely.  All rights reserved.
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.2 or,
@@ -702,6 +713,10 @@ sub serialize {
   my $self = (shift);
   my ($serializer,$cipher,$digester,$encoding,$compressor) = ('','','','','');
 
+  if ($self->raw) {
+    return $self->raw_serialize(@_);
+  }
+
   #we always serialize no matter what.
 
   #define serializer for token
@@ -762,15 +777,19 @@ sub retrieve {
   my $self = (shift);
   my $file_or_fh = (shift);
   if (ref($file_or_fh)) {
+    #Read in whole file at once
+    #local $/;
     #it is a file handle so read straight from it
-    my $input = <$file_or_fh>;
+    my $input = join('', <$file_or_fh>);
     chomp($input);
     return $self->deserialize($input);
     #We didn't open the filehandle, so we shouldn't close it.
   } else {
     my $fh = new IO::File; 
     $fh->open($file_or_fh, O_RDONLY) ||  croak "Cannot read from $file_or_fh: $!";
-    my $input = <$fh>;
+    #Read in whole file at once
+    #local $/;
+    my $input = join('', <$fh>);
     chomp($input);
     $fh->close;
     return $self->deserialize($input);
@@ -820,6 +839,11 @@ sub raw_deserialize {
 
 sub deserialize {
   my $self = (shift);
+
+  if ($self->raw) {
+    return $self->raw_deserialize(@_);
+  }
+
   my $value = (shift);
   my $token = $self->_get_token($value);
   my ($serializer,$cipher, $digester,$encoding, $compressor); 
@@ -854,4 +878,8 @@ sub deserialize {
   &Tie::Transient::hide_transients() if ($self->_transient());
   return wantarray ? @return : $return[0];
 }
+
+
+1;
+__END__
 

@@ -112,6 +112,12 @@ METHODS
         Compresses serialized data. Default is not to use it. Will compress
         if set to a true value $obj->compress(1);
 
+    raw - all calls to serializer and deserializer will automatically use
+    raw mode
+        Setting this to a true value will force serializer and deserializer
+        to work in raw mode (see raw_serializer and raw_deserializer). The
+        default is for this to be off.
+
     serializer - change the serializer
         Currently have 8 supported serializers: Storable, FreezeThaw,
         Data::Denter, Config::General, YAML, PHP::Serialization,
@@ -229,7 +235,7 @@ TODO
     would be welcome.
 
 COPYRIGHT AND LICENSE
-    Copyright (c) 2001-2007 Neil Neely. All rights reserved.
+    Copyright (c) 2001-2008 Neil Neely. All rights reserved.
 
     This library is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself, either Perl version 5.8.2 or, at
@@ -264,6 +270,7 @@ SEE ALSO
     JSON(3)
     JSON::Syck(3)
     Compress::Zlib(3)
+    Compress::PPMd(3)
     Digest(3)
     Digest::SHA(3)
     Crypt(3)
