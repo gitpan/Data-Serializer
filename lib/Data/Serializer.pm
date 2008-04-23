@@ -19,7 +19,7 @@ require Exporter;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.44';
+$VERSION = '0.45';
 
 # Preloaded methods go here.
 {
@@ -35,7 +35,7 @@ $VERSION = '0.44';
                   compress   => '0',
                   raw        => '0',
                   options    => {},
-                 transient   => '0',
+                 #transient   => '0',
             serializer_token => '1',
                 );
   sub new {
@@ -51,7 +51,11 @@ $VERSION = '0.44';
     $_internal{$dataref->{_key}} = $dataref;
     my $self = \$dataref->{_key};
     bless $self, $class;
-    $self->_transient(1) if (eval "require Tie::Transient");
+    #opting to not even warn on this, I don't think anyone ever used it as it never did get published on CPAN.
+    #If I am wrong and this is in production use, contact me 
+    #if (eval "require Tie::Transient") {
+    #  warn "Support for Tie::Transient is deprecated\n";
+    #}
     
     #load serializer module if it is defined
     return $self;
@@ -121,15 +125,6 @@ $VERSION = '0.44';
     my $return = $_internal{$id}->{encoding};
     if (@_) {
       $_internal{$id}->{encoding} = (shift);
-    }
-    return $return;
-  }
-  sub _transient {
-    my $self = (shift);
-    my $id = $$self;
-    my $return = $_internal{$id}->{transient};
-    if (@_) {
-      $_internal{$id}->{transient} = (shift);
     }
     return $return;
   }
@@ -456,21 +451,6 @@ Reads first line of supplied file or filehandle and returns it deserialized.
 
 =back
 
-=head1 TRANSIENCE 
-
-Data::Serializer is aware of Tie::Transient.  What this means is that you use
-Tie::Transient as normal, and when your object is serialized, the transient 
-components will be automatically removed for you.
-
-Tie::Transient is not on CPAN, and doesn't look like it ever will be.  With
-the advent of attributes from 5.8 this feature should probably be deprecated
-anyway.
-
-If you would like to use Tie::Transient you can download it directly 
-from Brian's site here:  http://www.maz.org/perl/Tie-Transient-0.05.tar.gz
-
-With perl attributes in 5.8, this should probably be deprecated.  
-
 =head1 AUTHOR
 
 Neil Neely <F<neil@neely.cx>>.
@@ -486,8 +466,6 @@ Please report all bugs here:
 http://rt.cpan.org/NoAuth/Bugs.html?Dist=Data-Serializer
 
 =head1 TODO
-
-Phase out support for Tie::Transient
 
 Extend the persistent framework.  Perhaps  L<Persistent::Base(3)> framework
 would be useful to explore further.  Volunteers for putting this together
@@ -562,8 +540,6 @@ This module is dedicated to my beautiful wife Erica.
 =item L<MIME::Base64(3)>
 
 =item L<IO::File(3)>
-
-=item L<Tie::Transient(3)>
 
 =back
 
@@ -721,9 +697,7 @@ sub serialize {
 
   #define serializer for token
   $serializer = $self->serializer;
-  &Tie::Transient::hide_transients() if ($self->_transient());
   my $value = $self->_serialize(\@_,$serializer);
-  &Tie::Transient::show_transients() if ($self->_transient());
 
   if ($self->compress) {
     $compressor = $self->compressor;
@@ -873,9 +847,7 @@ sub deserialize {
     $value = $self->_decompress($value);
   }
   #we always deserialize no matter what.
-  &Tie::Transient::show_transients() if ($self->_transient());
   my @return = $self->_deserialize($value,$serializer);
-  &Tie::Transient::hide_transients() if ($self->_transient());
   return wantarray ? @return : $return[0];
 }
 

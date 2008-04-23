@@ -6,10 +6,10 @@ use strict;
 use JSON;
 use vars qw($VERSION @ISA);
 
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 sub serialize {
-	return JSON->VERSION < 2 ? JSON->new->objToJson($_[1]) : JSON->new->encode($_[1]);
+	return JSON->VERSION < 2 ? JSON->new->objToJson($_[1]) : JSON->new->utf8->encode($_[1]);
 }
 
 sub deserialize {

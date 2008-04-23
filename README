@@ -200,21 +200,6 @@ METHODS
         Reads first line of supplied file or filehandle and returns it
         deserialized.
 
-TRANSIENCE
-    Data::Serializer is aware of Tie::Transient. What this means is that you
-    use Tie::Transient as normal, and when your object is serialized, the
-    transient components will be automatically removed for you.
-
-    Tie::Transient is not on CPAN, and doesn't look like it ever will be.
-    With the advent of attributes from 5.8 this feature should probably be
-    deprecated anyway.
-
-    If you would like to use Tie::Transient you can download it directly
-    from Brian's site here:
-    http://www.maz.org/perl/Tie-Transient-0.05.tar.gz
-
-    With perl attributes in 5.8, this should probably be deprecated.
-
 AUTHOR
     Neil Neely <neil@neely.cx>.
 
@@ -228,8 +213,6 @@ BUGS
     http://rt.cpan.org/NoAuth/Bugs.html?Dist=Data-Serializer
 
 TODO
-    Phase out support for Tie::Transient
-
     Extend the persistent framework. Perhaps Persistent::Base(3) framework
     would be useful to explore further. Volunteers for putting this together
     would be welcome.
@@ -276,5 +259,4 @@ SEE ALSO
     Crypt(3)
     MIME::Base64(3)
     IO::File(3)
-    Tie::Transient(3)
 

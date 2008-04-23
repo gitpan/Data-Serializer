@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                Data-Serializer
-version:             0.44
+version:             0.45
 abstract:            ~
 license:             ~
 generated_by:        ExtUtils::MakeMaker version 6.36

@@ -1,5 +1,12 @@
 Revision history for Perl extension Data::Serializer
 
+0.45  Wedn Apr  23 2008
+	- Removed support for Tie::Transient, the module is long gone.  If ever a standard
+	  emerges for tagging data as transient then Data::Serializer will support it.  
+	- Added utf8 call to Data::Serializer::JSON 
+		patch supplied by Makamaka <makamaka@donzoko.net> in response to complex bug discussion 
+		that started under Crypt::CBC http://rt.cpan.org/Public/Bug/Display.html?id=35239 
+
 0.44  Thu Dec  13 2008
 	- Added 'raw' flag to constructor, allows for more convenient
 	  raw access to underlying serializers
