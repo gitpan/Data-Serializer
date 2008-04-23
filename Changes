@@ -1,5 +1,8 @@
 Revision history for Perl extension Data::Serializer
 
+0.46  Wedn Apr  23 2008
+	- Fixed Module::Build implementation, will now generate proper META.yml file
+
 0.45  Wedn Apr  23 2008
 	- Removed support for Tie::Transient, the module is long gone.  If ever a standard
 	  emerges for tagging data as transient then Data::Serializer will support it.  

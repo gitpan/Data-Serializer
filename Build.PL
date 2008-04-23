@@ -1,10 +1,11 @@
 use Module::Build;
 my $build = Module::Build->new
 (
-	sign	=>	1,
+	#sign	=>	1,
 	module_name => 'Data::Serializer',
 	dist_author => 'Neil Neely (neil@neely.cx)',
 	license  => 'perl',
+	create_makefile_pl => 'passthrough',
 	build_class	=>	'Module::Build',
 	requires => {
 		'Exporter'	=> 0,
