@@ -1,9 +1,13 @@
 Revision history for Perl extension Data::Serializer
 
-0.46  Wedn Apr  23 2008
+0.47  Tue Aug  19 2008
+	- Added explicit DESTROY method to prevent memory leaks in long running applications with circular references
+		patch supplied by Dulaunoy Fabrice <fabrice@dulaunoy.com>
+
+0.46  Wed Apr  23 2008
 	- Fixed Module::Build implementation, will now generate proper META.yml file
 
-0.45  Wedn Apr  23 2008
+0.45  Wed Apr  23 2008
 	- Removed support for Tie::Transient, the module is long gone.  If ever a standard
 	  emerges for tagging data as transient then Data::Serializer will support it.  
 	- Added utf8 call to Data::Serializer::JSON 

@@ -19,7 +19,7 @@ require Exporter;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.46';
+$VERSION = '0.47';
 
 # Preloaded methods go here.
 {
@@ -193,7 +193,14 @@ $VERSION = '0.46';
     $_internal{$id}->{loaded_modules}->{$module_name} = 1;
   }
 
+  sub DESTROY {
+    my $self = (shift);
+    undef %_internal;
+    undef %_fields;
+  }
+
 }
+
 
 #END of public functions, all following functions are for internal use only
 
@@ -448,6 +455,11 @@ Trips an exception if it is unable to write to the specified file.
   my $ref = $obj->retrieve($fh);
 
 Reads first line of supplied file or filehandle and returns it deserialized.
+
+=item B<DESTROY> - force the destruction of the serilaizer object
+
+   $obj->DESTROY();
+
 
 =back
 
