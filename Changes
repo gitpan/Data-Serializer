@@ -1,5 +1,9 @@
 Revision history for Perl extension Data::Serializer
 
+0.48  Tue Aug  20 2008
+	- Cleaned up DESTROY method to not undef _fields (This was my error, not the submitted patch)
+		Thanks to Dulaunoy Fabrice <fabrice@dulaunoy.com> for showing me the error of my ways
+
 0.47  Tue Aug  19 2008
 	- Added explicit DESTROY method to prevent memory leaks in long running applications with circular references
 		patch supplied by Dulaunoy Fabrice <fabrice@dulaunoy.com>

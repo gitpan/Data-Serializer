@@ -1,6 +1,6 @@
 ---
 name: Data-Serializer
-version: 0.47
+version: 0.48
 author:
   - Neil Neely (neil@neely.cx)
 abstract: Modules that serialize data structures
@@ -39,7 +39,7 @@ recommends:
 provides:
   Data::Serializer:
     file: lib/Data/Serializer.pm
-    version: 0.47
+    version: 0.48
   Data::Serializer::Config::General:
     file: lib/Data/Serializer/Config/General.pm
     version: 0.02

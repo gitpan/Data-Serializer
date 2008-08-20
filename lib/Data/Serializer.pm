@@ -19,7 +19,7 @@ require Exporter;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.47';
+$VERSION = '0.48';
 
 # Preloaded methods go here.
 {
@@ -196,7 +196,6 @@ $VERSION = '0.47';
   sub DESTROY {
     my $self = (shift);
     undef %_internal;
-    undef %_fields;
   }
 
 }
