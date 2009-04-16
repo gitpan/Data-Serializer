@@ -6,18 +6,21 @@ use strict;
 use XML::Simple qw(); 
 use vars qw($VERSION @ISA);
 
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 
 sub serialize {
     my $self = (shift);
-    my $xml = XML::Simple->new(keyattr => [ 'name']);
+    my %options = ref $self->{options} eq 'HASH' ? %{$self->{options}}: ();
+    my $xml = XML::Simple->new(keyattr => [ 'name'], %options);
     return $xml->XMLout( (shift) );
 }
 
 sub deserialize {
-    my $xml = XML::Simple->new(keyattr => [ 'name']);
-    return $xml->XMLin($_[1]);
+    my $self = (shift);
+    my %options = ref $self->{options} eq 'HASH' ? %{$self->{options}}: ();
+    my $xml = XML::Simple->new(keyattr => [ 'name'], %options);
+    return $xml->XMLin( (shift) );
 }
 
 1;
@@ -36,9 +39,7 @@ Data::Serializer::XML::Simple - Creates bridge between Data::Serializer and XML:
 
 Module is used internally to Data::Serializer
 
-The only option currently supported is B<dtd>.  This just calls the dtd method of XML::Simple
-prior to serializing the data.   See XML::Simple(3) for details.
-
+Any options are passed through to XML::Simple.  See XML::Simple(3) for details.
 
 =over 4
 
