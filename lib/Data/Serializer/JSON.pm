@@ -13,7 +13,8 @@ sub serialize {
 }
 
 sub deserialize {
-	return JSON->VERSION < 2 ? JSON->new->jsonToObj($_[1]) : JSON->new->decode($_[1]);
+	#return JSON->VERSION < 2 ? JSON->new->jsonToObj($_[1]) : JSON->new->decode($_[1]);
+	$_[1] and return JSON->VERSION < 2 ? JSON->new->jsonToObj($_[1]) : JSON->new->decode($_[1]);
 }
 
 1;
