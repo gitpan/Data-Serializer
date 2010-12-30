@@ -19,7 +19,7 @@ require Exporter;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.49';
+$VERSION = '0.50';
 
 # Preloaded methods go here.
 {
@@ -654,9 +654,10 @@ sub _dedigest {
   my $input = (shift);
   my $digester = (shift);
   $self->_module_loader('Digest');	
-  my ($old_digest) = $input =~ /^([^=]+?)=/;
+  #my ($old_digest) = $input =~ /^([^=]+?)=/;
+  $input =~ s/^([^=]+?)=//;
+  my $old_digest = $1;
   return undef unless (defined $old_digest);
-  $input =~ s/^$old_digest=//;
   my $new_digest = $self->_get_digest($input,$digester);
   return undef unless ($new_digest eq $old_digest);
   return $input;
