@@ -17,7 +17,7 @@ name: Data-Serializer
 provides:
   Data::Serializer:
     file: lib/Data/Serializer.pm
-    version: 0.51
+    version: 0.52
   Data::Serializer::Config::General:
     file: lib/Data/Serializer/Config/General.pm
     version: 0.02
@@ -87,4 +87,4 @@ requires:
   IO::File: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.51
+version: 0.52

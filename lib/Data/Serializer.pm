@@ -19,192 +19,173 @@ require Exporter;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.51';
+$VERSION = '0.52';
 
-# Preloaded methods go here.
-{
-  my %_internal;
-  my %_fields = (
-                  serializer => 'Data::Dumper',
-                  digester   => 'SHA-256',
-                  cipher     => 'Blowfish',
-                  encoding   => 'hex',
-                  compressor => 'Compress::Zlib',
-                  secret     => undef,
-                  portable   => '1',
-                  compress   => '0',
-                  raw        => '0',
-                  options    => {},
-                 #transient   => '0',
-            serializer_token => '1',
-                );
-  sub new {
-    my ($class, %args) = @_;
-    my $dataref = {%_fields};
-    foreach my $field (keys %_fields) {
-      $dataref->{$field} = $args{$field} if exists $args{$field};
-    }
+#Global cache of modules we've loaded
+my %_MODULES;
 
-    $dataref->{_key} = rand
-      until $dataref->{_key} && !exists $_internal{$dataref->{_key}};
+my %_fields = (
+                serializer => 'Data::Dumper',
+                digester   => 'SHA-256',
+                cipher     => 'Blowfish',
+                encoding   => 'hex',
+                compressor => 'Compress::Zlib',
+                secret     => undef,
+                portable   => '1',
+                compress   => '0',
+                raw        => '0',
+                options    => {},
+          serializer_token => '1',
+              );
+sub new {
+	my ($class, %args) = @_;
+	my $dataref = {%_fields};
+	foreach my $field (keys %_fields) {
+		$dataref->{$field} = $args{$field} if exists $args{$field};
+	}
+	my $self = $dataref;
+	bless $self, $class;
+	return $self;
+}
 
-    $_internal{$dataref->{_key}} = $dataref;
-    my $self = \$dataref->{_key};
-    bless $self, $class;
-    #opting to not even warn on this, I don't think anyone ever used it as it never did get published on CPAN.
-    #If I am wrong and this is in production use, contact me 
-    #if (eval "require Tie::Transient") {
-    #  warn "Support for Tie::Transient is deprecated\n";
-    #}
-    
-    #load serializer module if it is defined
-    return $self;
-  }
-  sub _serializer_obj {
-    my $self = (shift);
-    my $id = $$self;
-    my $serializer;
-    if (@_) {
-      #if argument, then use it for serializing.
-      $serializer = (shift);
-    } else {
-      $serializer = $_internal{$id}->{serializer};
-    }
-    $_internal{$id}->{serializer_obj}->{options} = $self->options();
-    bless $_internal{$id}->{serializer_obj}, "Data::Serializer::$serializer";
-  }
-  sub serializer {
-    my $self = (shift);
-    my $id = $$self;
-    my $return = $_internal{$id}->{serializer};
-    if (@_) {
-      $_internal{$id}->{serializer} = (shift);
-    }
-    return $return;
-  }
-  sub digester {
-    my $self = (shift);
-    my $id = $$self;
-    my $return = $_internal{$id}->{digester};
-    if (@_) {
-      my $value = (shift);
-      $_internal{$id}->{digester} = $value;
-    }
-    return $return;
-  }
-  sub cipher {
-    my $self = (shift);
-    my $id = $$self;
-    my $return = $_internal{$id}->{cipher};
-    if (@_) {
-      $_internal{$id}->{cipher} = (shift);
-    }
-    return $return;
-  }
-  sub compressor {
-    my $self = (shift);
-    my $id = $$self;
-    my $return = $_internal{$id}->{compressor};
-    if (@_) {
-      $_internal{$id}->{compressor} = (shift);
-    }
-    return $return;
-  }
-  sub secret {
-    my $self = (shift);
-    my $id = $$self;
-    my $return = $_internal{$id}->{secret};
-    if (@_) {
-      $_internal{$id}->{secret} = (shift);
-    }
-    return $return;
-  }
-  sub encoding {
-    my $self = (shift);
-    my $id = $$self;
-    my $return = $_internal{$id}->{encoding};
-    if (@_) {
-      $_internal{$id}->{encoding} = (shift);
-    }
-    return $return;
-  }
-  sub portable {
-    my $self = (shift);
-    my $id = $$self;
-    my $return = $_internal{$id}->{portable};
-    if (@_) {
-      $_internal{$id}->{portable} = (shift);
-    }
-    return $return;
-  }
-  sub options {
-    my $self = (shift);
-    my $id = $$self;
-    my $return = $_internal{$id}->{options};
-    if (@_) {
-      $_internal{$id}->{options} = (shift);
-    }
-    return $return;
-  }
-  sub compress {
-    my $self = (shift);
-    my $id = $$self;
-    my $return = $_internal{$id}->{compress};
-    if (@_) {
-      $_internal{$id}->{compress} = (shift);
-    }
-    return $return;
-  }
-  sub raw {
-    my $self = (shift);
-    my $id = $$self;
-    my $return = $_internal{$id}->{raw};
-    if (@_) {
-      $_internal{$id}->{raw} = (shift);
-    }
-    return $return;
-  }
-  sub serializer_token {
-    my $self = (shift);
-    my $id = $$self;
-    my $return = $_internal{$id}->{serializer_token};
-    if (@_) {
-      $_internal{$id}->{serializer_token} = (shift);
-    }
-    return $return;
-  }
-  sub _module_loader {
-    my $self = (shift);
-    my $id = $$self;
-    my $module_name = (shift);
-    return if (exists $_internal{$id}->{loaded_modules}->{$module_name});
-    if (@_) {
-      $module_name = (shift) . "::$module_name";
-    }
-    my $package = $module_name;
-    $package =~ s|::|/|g;
-    $package .= ".pm";
-    eval { require $package };
-    if ($@) {
-      carp "Data::Serializer error: " . 
-           "Please make sure $package is a properly installed package.\n";
-      return undef;
-    }
-    $_internal{$id}->{loaded_modules}->{$module_name} = 1;
-  }
+sub _serializer_obj {
+	my $self = (shift);
+	my $serializer;
+	if (@_) {
+		#if argument, then use it for serializing.
+		$serializer = (shift);
+	} else {
+		$serializer = $self->{serializer};
+	}
+	$self->{serializer_obj}->{options} = $self->options();
+	bless $self->{serializer_obj}, "Data::Serializer::$serializer";
+}
 
-  sub DESTROY {
-    my $self = (shift);
-    undef %_internal;
-  }
+sub serializer {
+	my $self = (shift);
+	my $return = $self->{serializer};
+	if (@_) {
+		$self->{serializer} = (shift);
+	}
+	return $return;
+}
 
+sub digester {
+	my $self = (shift);
+	my $return = $self->{digester};
+	if (@_) {
+		my $value = (shift);
+		$self->{digester} = $value;
+	}
+	return $return;
+}
+
+sub cipher {
+	my $self = (shift);
+	my $return = $self->{cipher};
+	if (@_) {
+		$self->{cipher} = (shift);
+	}
+	return $return;
+}
+
+sub compressor {
+	my $self = (shift);
+	my $return = $self->{compressor};
+	if (@_) {
+		$self->{compressor} = (shift);
+	}
+	return $return;
+}
+
+sub secret {
+	my $self = (shift);
+	my $return = $self->{secret};
+	if (@_) {
+		$self->{secret} = (shift);
+	}
+	return $return;
+}
+
+sub encoding {
+	my $self = (shift);
+	my $return = $self->{encoding};
+	if (@_) {
+		$self->{encoding} = (shift);
+	}
+	return $return;
+}
+
+sub portable {
+	my $self = (shift);
+	my $return = $self->{portable};
+	if (@_) {
+		$self->{portable} = (shift);
+	}
+	return $return;
+}
+
+sub options {
+	my $self = (shift);
+	my $return = $self->{options};
+	if (@_) {
+		$self->{options} = (shift);
+	}
+	return $return;
+}
+
+sub compress {
+	my $self = (shift);
+	my $return = $self->{compress};
+	if (@_) {
+		$self->{compress} = (shift);
+	}
+	return $return;
+}
+
+sub raw {
+	my $self = (shift);
+	my $return = $self->{raw};
+	if (@_) {
+		$self->{raw} = (shift);
+	}
+	return $return;
+}
+
+sub serializer_token {
+	my $self = (shift);
+	my $return = $self->{serializer_token};
+	if (@_) {
+		$self->{serializer_token} = (shift);
+	}
+	return $return;
+}
+
+sub _module_loader {
+	my $self = (shift);
+	my $module_name = (shift);
+	return if (exists $_MODULES{$module_name});
+	if (@_) {
+		$module_name = (shift) . "::$module_name";
+	}
+	my $package = $module_name;
+	$package =~ s|::|/|g;
+	$package .= ".pm";
+	eval { require $package };
+	if ($@) {
+		carp "Data::Serializer error: " . 
+		 "Please make sure $package is a properly installed package.\n";
+		return undef;
+	}
+	$_MODULES{$module_name} = 1;
 }
 
 
-#END of public functions, all following functions are for internal use only
 
 
 #Documentation follows
+
+=pod
 
 =head1 NAME
 
@@ -564,6 +545,7 @@ sub _serialize {
   my $serializer_obj = $self->_serializer_obj($method);
   return $serializer_obj->serialize(@input);
 }
+
 sub _compress {
   my $self = (shift);
   $self->_module_loader($self->compressor);	

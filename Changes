@@ -1,5 +1,10 @@
 Revision history for Perl extension Data::Serializer
 
+0.52  Mon Jan   3 2011
+	- Simplfied object by removing %_internal references, base $serializer object is much simpler now.
+	  This eliminated the need for an overridden DESTROY method, and should truly fix the memory leak
+	  problem originally reported by fabrice@dulaunoy.com, essentially it was confusing the Garbage collector  (Fix Bug#39592)
+
 0.51  Wed Dec  29 2010
 	- Modified JSON deserializer to handle corrupt input (Bug#63259)
 		Thanks to neil.whelchel@gmail.com for report and patch
