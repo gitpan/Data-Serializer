@@ -1,5 +1,12 @@
 Revision history for Perl extension Data::Serializer
 
+0.53  Mon Jan  10 2011
+	- Modified tests for XML::Simple - it has sub-dependencies on either XML::Parser or XML::SAX
+	  the test harness was posting a failure if neither of these were present.  Now it will treat XML::Simple
+	  as if it weren't installed if it is missing it's own depenencies.  This version only modifies the test harness
+	  no modification to module code.
+		Thanks to the cpantesters automated reporting for finding this.
+	
 0.52  Mon Jan   3 2011
 	- Simplfied object by removing %_internal references, base $serializer object is much simpler now.
 	  This eliminated the need for an overridden DESTROY method, and should truly fix the memory leak

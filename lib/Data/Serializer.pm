@@ -19,7 +19,7 @@ require Exporter;
 @EXPORT = qw( );
 @EXPORT_OK = qw( );
 
-$VERSION = '0.52';
+$VERSION = '0.53';
 
 #Global cache of modules we've loaded
 my %_MODULES;
