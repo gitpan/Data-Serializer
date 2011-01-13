@@ -1,5 +1,10 @@
 Revision history for Perl extension Data::Serializer
 
+0.54  Thu Jan  13 2011
+	- Added Data::Serializer::Raw as a lightweight means of providing a unified raw access to the underlying serializers
+	  also improved caching of serializer object inside of Data::Serializer
+		Thanks to Peter Makholm <peter@makholm.net> for the profiling done by Benchmark::Serialize
+
 0.53  Mon Jan  10 2011
 	- Modified tests for XML::Simple - it has sub-dependencies on either XML::Parser or XML::SAX
 	  the test harness was posting a failure if neither of these were present.  Now it will treat XML::Simple

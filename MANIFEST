@@ -7,6 +7,7 @@ INSTALL
 Build.PL
 Makefile.PL
 lib/Data/Serializer.pm
+lib/Data/Serializer/Raw.pm
 lib/Data/Serializer/Storable.pm
 lib/Data/Serializer/FreezeThaw.pm
 lib/Data/Serializer/Data/Dumper.pm
@@ -37,7 +38,8 @@ t/01-10-Data-Taxi.t
 t/01-11-YAML-Syck.t
 t/01-12-JSON.t
 t/01-13-JSON-Syck.t
-t/02-Raw.t
+t/02-01-Orig-Raw.t 
+t/02-02-Fast-Raw.t
 t/03-Non-Portable.t
 t/04-01-Compress-Zlib.t
 t/04-02-Compress-PPMd.t

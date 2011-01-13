@@ -232,6 +232,7 @@ $testrefs{selfrefarray}->[3]   = $testrefs{selfrefarray}->[1];
                   );
 
 %features = (
+                'objraw'     	 => [],
                 'raw'     	 => [],
                 'rawnew'     	 => [],
                 'non-portable'   => [],
@@ -251,8 +252,14 @@ $testrefs{selfrefarray}->[3]   = $testrefs{selfrefarray}->[1];
 sub run_test {
         my ($T,$serializer,$test,$features) = @_;
         $T->msg("Test $serializer $test $features");  # message for the log
-        my $obj = Data::Serializer->new(serializer=>$serializer);
-        foreach my $feature (split(" ", $features)) {
+	my $obj;
+        my @features = (split(" ", $features));
+        if (grep {/^objraw$/} @features) {
+        	$obj = Data::Serializer::Raw->new(serializer=>$serializer);
+	} else {
+        	$obj = Data::Serializer->new(serializer=>$serializer);
+	}
+        foreach my $feature (@features) {
                 if ($feature eq 'basic') {
                         #do nothing special
                 } elsif ($feature eq 'non-portable') {
@@ -301,10 +308,13 @@ sub run_test {
                 }
         }
         my ($frozen,$thawed);
-        if (grep {/raw/} $features) {
+        if (grep {/^objraw$/} @features) {
+          $frozen = $obj->serialize($testrefs{$test});
+          $thawed = $obj->deserialize($frozen);
+        }elsif (grep {/^raw$/} @features) {
           $frozen = $obj->raw_serialize($testrefs{$test});
           $thawed = $obj->raw_deserialize($frozen);
-        } elsif (grep {/rawnew/} $features) {
+        } elsif (grep {/^rawnew$/} @features) {
           my $newobj = Data::Serializer->new(
 					serializer=>$serializer,
 					raw => 1,
@@ -315,7 +325,7 @@ sub run_test {
           $thawed = $obj->deserialize($frozen);
 	
 	  
-        } elsif (grep {/fh-storage/} $features) {
+        } elsif (grep {/fh-storage/} @features) {
     	  my $fh = IO::File->new($file_path, O_CREAT|O_WRONLY, 0600);
           $obj->store($testrefs{$test},$fh);
           $fh->close(); 
@@ -324,11 +334,11 @@ sub run_test {
           $thawed = $obj->retrieve($fh);
           $fh->close(); 
           unlink($file_path);
-        } elsif (grep {/storage/} $features) {
+        } elsif (grep {/storage/} @features) {
           $obj->store($testrefs{$test},$file_path);
           $thawed = $obj->retrieve($file_path);
           unlink($file_path);
-        } elsif (grep {/rawstorage/} $features) {
+        } elsif (grep {/rawstorage/} @features) {
           my $newobj = Data::Serializer->new(
 					serializer=>$serializer,
 					raw => 1,
