@@ -374,10 +374,17 @@ sub run_test {
           $obj->store($testrefs{$test},$file_path);
           $thawed = $obj->retrieve($file_path);
           unlink($file_path);
-        } elsif (grep {/rawstorage/} @features) {
+        } elsif (grep {/rawstorage1/} @features) {
           my $newobj = Data::Serializer->new(
 					serializer=>$serializer,
 					raw => 1,
+						);
+          $newobj->store($testrefs{$test},$file_path);
+          $thawed = $newobj->retrieve($file_path);
+          unlink($file_path);
+        } elsif (grep {/rawstorage2/} @features) {
+          my $newobj = Data::Serializer::Raw->new(
+					serializer=>$serializer,
 						);
           $newobj->store($testrefs{$test},$file_path);
           $thawed = $newobj->retrieve($file_path);

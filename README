@@ -23,6 +23,12 @@ DESCRIPTION
     currently available. Adds the functionality of both compression and
     encryption.
 
+    By default Data::Serializer(3) adds minor metadata and encodes
+    serialized data structures in it's own format. If you are looking for a
+    simple unified pass through interface to the underlying serializers then
+    look into Data::Serializer::Raw(3) that comes bundled with
+    Data::Serializer(3).
+
 EXAMPLES
     Please see Data::Serializer::Cookbook(3)
 
@@ -41,7 +47,7 @@ METHODS
                                    options  => {},
                                 );
 
-        new is the constructor object for Data::Serializer objects.
+        new is the constructor object for Data::Serializer(3) objects.
 
         *   The default *serializer* is "Data::Dumper"
 
@@ -90,18 +96,24 @@ METHODS
         This is a straight pass through to the underlying serializer,
         nothing else is done. (no encoding, encryption, compression, etc)
 
+        If you desire this functionality you should look at
+        Data::Serializer::Raw(3) instead, it is faster and leaner.
+
     raw_deserialize - deserialize reference in raw form
           $deserialized = $obj->raw_deserialize($serialized);
 
         This is a straight pass through to the underlying serializer,
         nothing else is done. (no encoding, encryption, compression, etc)
 
+        If you desire this functionality you should look at
+        Data::Serializer::Raw(3) instead, it is faster and leaner.
+
     secret - specify secret for use with encryption
           $obj->secret('mysecret');
 
-        Changes setting of secret for the Data::Serializer object. Can also
-        be set in the constructor. If specified than the object will utilize
-        encryption.
+        Changes setting of secret for the Data::Serializer(3) object. Can
+        also be set in the constructor. If specified than the object will
+        utilize encryption.
 
     portable - encodes/decodes serialized data
         Uses encoding method to ascii armor serialized data
@@ -118,10 +130,28 @@ METHODS
         to work in raw mode (see raw_serializer and raw_deserializer). The
         default is for this to be off.
 
+        If you desire this functionality you should look at
+        Data::Serializer::Raw(3) instead, it is faster and leaner.
+
     serializer - change the serializer
-        Currently have 8 supported serializers: Storable, FreezeThaw,
-        Data::Denter, Config::General, YAML, PHP::Serialization,
-        XML::Dumper, and Data::Dumper.
+        Currently supports the following serializers:
+
+        Bencode(3)
+        Convert::Bencode(3)
+        Convert::Bencode_XS(3)
+        Config::General(3)
+        Data::Denter(3)
+        Data::Dumper(3)
+        Data::Taxi(3)
+        FreezeThaw(3)
+        JSON(3)
+        JSON::Syck(3)
+        PHP::Serialization(3)
+        Storable(3)
+        XML::Dumper(3)
+        XML::Simple(3)
+        YAML(3)
+        YAML::Syck(3)
 
         Default is to use Data::Dumper.
 
@@ -131,32 +161,34 @@ METHODS
         information.
 
     cipher - change the cipher method
-        Utilizes Crypt::CBC and can support any cipher method that it
+        Utilizes Crypt::CBC(3) and can support any cipher method that it
         supports.
 
     digester - change digesting method
-        Uses Digest so can support any digesting method that it supports.
+        Uses Digest(3) so can support any digesting method that it supports.
         Digesting function is used internally by the encryption routine as
         part of data verification.
 
     compressor - changes compresing module
-        Currently Compress::Zlib and Compress::PPMd are the only options
+        Currently Compress::Zlib(3) and Compress::PPMd(3) are the only
+        options
 
     encoding - change encoding method
         Encodes data structure in ascii friendly manner. Currently the only
         valid options are hex, or b64.
 
-        The b64 option uses Base64 encoding provided by MIME::Base64, but
+        The b64 option uses Base64 encoding provided by MIME::Base64(3), but
         strips out newlines.
 
     serializer_token - add usage hint to data
-        Data::Serializer prepends a token that identifies what was used to
-        process its data. This is used internally to allow runtime
-        determination of how to extract Serialized data. Disabling this
-        feature is not recommended.
+        Data::Serializer(3) prepends a token that identifies what was used
+        to process its data. This is used internally to allow runtime
+        determination of how to extract serialized data. Disabling this
+        feature is not recommended. (Use Data::Serializer::Raw(3) instead).
 
     options - pass options through to underlying serializer
-        Currently is only supported by Config::General, and XML::Dumper.
+        Currently is only supported by Config::General(3), and
+        XML::Dumper(3).
 
           my $obj = Data::Serializer->new(serializer => 'Config::General',
                                           options    => {
@@ -210,7 +242,7 @@ AUTHOR
 BUGS
     Please report all bugs here:
 
-    http://rt.cpan.org/NoAuth/Bugs.html?Dist=Data-Serializer
+    http://rt.cpan.org/Public/Dist/Display.html?Name=Data-Serializer
 
 TODO
     Extend the persistent framework. Perhaps Persistent::Base(3) framework
@@ -218,7 +250,7 @@ TODO
     would be welcome.
 
 COPYRIGHT AND LICENSE
-    Copyright (c) 2001-2008 Neil Neely. All rights reserved.
+    Copyright (c) 2001-2011 Neil Neely. All rights reserved.
 
     This library is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself, either Perl version 5.8.2 or, at
@@ -227,8 +259,8 @@ COPYRIGHT AND LICENSE
     See http://www.perl.com/language/misc/Artistic.html
 
 ACKNOWLEDGEMENTS
-    Gurusamy Sarathy and Raphael Manfredi for writing MLDBM, the module
-    which inspired the creation of Data::Serializer.
+    Gurusamy Sarathy and Raphael Manfredi for writing MLDBM(3), the module
+    which inspired the creation of Data::Serializer(3).
 
     And thanks to all of you who have provided the feedback that has
     improved this module over the years.
@@ -240,23 +272,28 @@ DEDICATION
     This module is dedicated to my beautiful wife Erica.
 
 SEE ALSO
-    Data::Dumper(3)
-    Data::Denter(3)
-    Data::Taxi(3)
-    Storable(3)
-    FreezeThaw(3)
+    Bencode(3)
+    Convert::Bencode(3)
+    Convert::Bencode_XS(3)
     Config::General(3)
-    YAML(3)
-    YAML::Syck(3)
-    PHP::Serialization(3)
-    XML::Dumper(3)
+    Data::Denter(3)
+    Data::Dumper(3)
+    Data::Taxi(3)
+    FreezeThaw(3)
     JSON(3)
     JSON::Syck(3)
+    PHP::Serialization(3)
+    Storable(3)
+    XML::Dumper(3)
+    XML::Simple(3)
+    YAML(3)
+    YAML::Syck(3)
     Compress::Zlib(3)
     Compress::PPMd(3)
     Digest(3)
     Digest::SHA(3)
-    Crypt(3)
+    Crypt::CBC(3)
     MIME::Base64(3)
     IO::File(3)
+    Data::Serializer::Config::Wrest(3) - adds supports for Config::Wrest(3)
 

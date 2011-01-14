@@ -5,7 +5,7 @@ use strict;
 use vars qw($VERSION);
 use Carp;
 
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 #Global cache of modules we've loaded
 my %_MODULES;
@@ -50,6 +50,30 @@ sub options {
         }
         return $return;
 }
+
+sub _persistent_obj {
+        my $self = (shift);
+        return $self->{persistent_obj} if (exists $self->{persistent_obj});
+        $self->_module_loader('Data::Serializer::Persistent');  
+        my $persistent_obj = { parent => $self };
+        bless $persistent_obj, "Data::Serializer::Persistent";
+        $self->{persistent_obj} = $persistent_obj;
+        return $persistent_obj;
+                
+}
+
+sub store {
+        my $self = (shift);
+        my $persistent = $self->_persistent_obj();
+        $persistent->_store(@_);
+}
+
+sub retrieve {
+        my $self = (shift);
+        my $persistent = $self->_persistent_obj();
+        $persistent->_retrieve(@_);
+}
+
 
 sub _module_loader {
         my $self = (shift);
@@ -248,6 +272,34 @@ Currently is only supported by L<Config::General(3)>, and L<XML::Dumper(3)>.
   my $obj = Data::Serializer::Raw->new(serializer => 'XML::Dumper',
                                   options    => { dtd => 1, }
                                   ) or die "$!\n";
+
+=item B<store> - serialize data and write it to a file (or file handle)
+
+  $obj->store({a => [1,2,3],b => 5},$file, [$mode, $perm]);
+
+  or 
+
+  $obj->store({a => [1,2,3],b => 5},$fh);
+
+
+Serializes the reference specified using the B<serialize> method
+and writes it out to the specified file or filehandle.  
+
+If a file path is specified you may specify an optional mode and permission as the
+next two arguments.  See L<IO::File> for examples.
+
+Trips an exception if it is unable to write to the specified file.
+
+=item B<retrieve> - read data from file (or file handle) and return it after deserialization 
+
+  my $ref = $obj->retrieve($file);
+
+  or 
+
+  my $ref = $obj->retrieve($fh);
+
+Reads first line of supplied file or filehandle and returns it deserialized.
+
 
 =back
 

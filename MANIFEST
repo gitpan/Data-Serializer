@@ -8,6 +8,7 @@ Build.PL
 Makefile.PL
 lib/Data/Serializer.pm
 lib/Data/Serializer/Raw.pm
+lib/Data/Serializer/Persistent.pm
 lib/Data/Serializer/Storable.pm
 lib/Data/Serializer/FreezeThaw.pm
 lib/Data/Serializer/Data/Dumper.pm

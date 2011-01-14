@@ -17,7 +17,7 @@ name: Data-Serializer
 provides:
   Data::Serializer:
     file: lib/Data/Serializer.pm
-    version: 0.55
+    version: 0.56
   Data::Serializer::Bencode:
     file: lib/Data/Serializer/Bencode.pm
     version: 0.03
@@ -54,9 +54,12 @@ provides:
   Data::Serializer::PHP::Serialization:
     file: lib/Data/Serializer/PHP/Serialization.pm
     version: 0.02
+  Data::Serializer::Persistent:
+    file: lib/Data/Serializer/Persistent.pm
+    version: 0.01
   Data::Serializer::Raw:
     file: lib/Data/Serializer/Raw.pm
-    version: 0.01
+    version: 0.02
   Data::Serializer::Storable:
     file: lib/Data/Serializer/Storable.pm
     version: 0.03
@@ -73,9 +76,12 @@ provides:
     file: lib/Data/Serializer/YAML/Syck.pm
     version: 0.02
 recommends:
+  Bencode: 0
   Compress::PPMd: 0
   Compress::Zlib: 0
   Config::General: 0
+  Convert::Bencode: 0
+  Convert::Bencode_XS: 0
   Crypt::Blowfish: 0
   Crypt::CBC: 0
   Data::Denter: 0
@@ -99,4 +105,4 @@ requires:
   IO::File: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.55
+version: 0.56

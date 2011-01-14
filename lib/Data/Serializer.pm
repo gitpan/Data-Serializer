@@ -5,10 +5,9 @@ use strict;
 use vars qw($VERSION);
 
 use Carp;
-use IO::File;
 require 5.004 ;
 
-$VERSION = '0.55';
+$VERSION = '0.56';
 
 #Global cache of modules we've loaded
 my %_MODULES;
@@ -39,19 +38,6 @@ sub new {
   	$self->_serializer_obj();
 	return $self;
 }
-
-#sub _serializer_obj {
-#	my $self = (shift);
-#	my $serializer;
-#	if (@_) {
-#		#if argument, then use it for serializing.
-#		$serializer = (shift);
-#	} else {
-#		$serializer = $self->{serializer};
-#	}
-#	$self->{serializer_obj}->{options} = $self->options();
-#	bless $self->{serializer_obj}, "Data::Serializer::$serializer";
-#}
 
 sub _serializer_obj {
         my $self = (shift);
@@ -88,6 +74,18 @@ sub _serializer_obj {
 	return $serializer_obj;
 
 }
+
+sub _persistent_obj {
+        my $self = (shift);
+        return $self->{persistent_obj} if (exists $self->{persistent_obj});
+  	$self->_module_loader('Data::Serializer::Persistent');	
+        my $persistent_obj = { parent => $self };
+        bless $persistent_obj, "Data::Serializer::Persistent";
+        $self->{persistent_obj} = $persistent_obj;
+        return $persistent_obj;
+                
+}
+
 
 
 sub serializer {
@@ -197,6 +195,9 @@ sub serializer_token {
 sub _module_loader {
 	my $self = (shift);
 	my $module_name = (shift);
+	unless (defined $module_name) {
+		confess "Something wrong - module not defined! $! $@\n";
+	}
 	return if (exists $_MODULES{$module_name});
 	if (@_) {
 		$module_name = (shift) . "::$module_name";
@@ -397,51 +398,15 @@ sub serialize {
 }
 
 sub store {
-  my $self = (shift);
-  my $data = (shift);
-  my $file_or_fh = (shift);
-
-  if (ref($file_or_fh)) {
-    #it is a file handle so print straight to it
-    print $file_or_fh $self->serialize($data), "\n";
-    #We didn't open the filehandle, so we shouldn't close it.
-  } else {
-    #it is a file, so open it
-    my ($mode,$perm) = @_;
-    unless (defined $mode) {
-      $mode = O_CREAT|O_WRONLY;
-    }
-    unless (defined $perm) {
-      $perm = 0600;
-    }
-    my $fh = new IO::File; 
-    $fh->open($file_or_fh, $mode,$perm) || croak "Cannot write to $file_or_fh: $!";
-    print $fh $self->serialize($data), "\n";
-    $fh->close();
-  }
+	my $self = (shift);
+	my $persistent = $self->_persistent_obj();
+	$persistent->_store(@_);
 }
 
 sub retrieve {
-  my $self = (shift);
-  my $file_or_fh = (shift);
-  if (ref($file_or_fh)) {
-    #Read in whole file at once
-    #local $/;
-    #it is a file handle so read straight from it
-    my $input = join('', <$file_or_fh>);
-    chomp($input);
-    return $self->deserialize($input);
-    #We didn't open the filehandle, so we shouldn't close it.
-  } else {
-    my $fh = new IO::File; 
-    $fh->open($file_or_fh, O_RDONLY) ||  croak "Cannot read from $file_or_fh: $!";
-    #Read in whole file at once
-    #local $/;
-    my $input = join('', <$fh>);
-    chomp($input);
-    $fh->close;
-    return $self->deserialize($input);
-  }
+	my $self = (shift);
+	my $persistent = $self->_persistent_obj();
+	$persistent->_retrieve(@_);
 }
 
 sub raw_serialize {

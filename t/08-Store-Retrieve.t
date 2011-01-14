@@ -23,7 +23,7 @@ foreach my $serializer (keys %serializers) {
 
 $T->msg("No serializers found!!") unless (@serializers);
 
-my @types = qw(fh-storage storage rawstorage);
+my @types = qw(fh-storage storage rawstorage1 rawstorage2);
 
 find_features($T,@types);
 
