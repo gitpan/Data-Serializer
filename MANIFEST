@@ -21,6 +21,9 @@ lib/Data/Serializer/XML/Dumper.pm
 lib/Data/Serializer/XML/Simple.pm
 lib/Data/Serializer/Cookbook.pm
 lib/Data/Serializer/JSON.pm
+lib/Data/Serializer/Bencode.pm
+lib/Data/Serializer/Convert/Bencode.pm
+lib/Data/Serializer/Convert/Bencode_XS.pm
 lib/Data/Serializer/JSON/Syck.pm
 t/ExtUtils/TBone.pm
 t/00-01-Signature.t
@@ -38,6 +41,9 @@ t/01-10-Data-Taxi.t
 t/01-11-YAML-Syck.t
 t/01-12-JSON.t
 t/01-13-JSON-Syck.t
+t/01-14-Bencode.t
+t/01-15-Convert-Bencode.t
+t/01-16-Convert-Bencode_XS.t
 t/02-01-Orig-Raw.t 
 t/02-02-Fast-Raw.t
 t/03-Non-Portable.t

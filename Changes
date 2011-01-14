@@ -1,5 +1,9 @@
 Revision history for Perl extension Data::Serializer
 
+0.55  Thu Jan  14 2011
+	- Added support for Bencode, Convert::Bencode, and Convert::Bencode_XS
+	- Documentation updates
+
 0.54  Thu Jan  13 2011
 	- Added Data::Serializer::Raw as a lightweight means of providing a unified raw access to the underlying serializers
 	  also improved caching of serializer object inside of Data::Serializer

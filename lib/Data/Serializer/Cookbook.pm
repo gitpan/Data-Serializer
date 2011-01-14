@@ -5,7 +5,7 @@ use warnings;
 use strict;
 use vars ('$VERSION');
 
-$VERSION = '0.04';
+$VERSION = '0.05';
 
 1;
 
@@ -34,6 +34,18 @@ begin with:
 
 Some examples will show different arguments to the B<new> method, 
 where specified simply use that line instead of the simple form above.
+
+=head1 CONVENTIONS for Raw Access
+
+Fort hose who want a straight pass through to the underlying serializer, where 
+nothing else is done (no encoding, encryption, compression, etc) there is L<Data::Serializer::Raw(3)>.
+
+These begin like this:
+
+  use Data::Serializer::Raw;
+
+  my $raw_serializer = Data::Serializer::Raw->new();
+
 
 =head1 Encrypting your data 
 
@@ -82,11 +94,11 @@ to be able to process data serialized by XML::Dumper.
 
 =head2 Solution
 
-  my $xml_serializer = Data::Serializer->(serializer => 'XML::Dumper', raw => 1);
+  use Data::Serializer::Raw;
 
-  my $hash_ref = $serializer->deserialize($xml_data);
+  my $xml_raw_serializer = Data::Serializer::Raw->(serializer => 'XML::Dumper');
 
-Note: the raw_deserialize method can be used as well, but the above approach is preferred.
+  my $hash_ref = $xml_raw_serializer->deserialize($xml_data);
 
 =head1 You want to write serialized data in a form understood outside of Data::Serializer
 
@@ -97,11 +109,12 @@ For our example we will be exporting data using XML::Dumper format.
 
 =head2 Solution
 
-  my $xml_serializer = Data::Serializer->(serializer => 'XML::Dumper', raw => 1);
+  ues Data::Serializer::Raw;
 
-  my $xml_data = $serializer->serialize($hash_ref);
+  my $xml_raw_serializer = Data::Serializer::Raw->(serializer => 'XML::Dumper');
 
-Note: the raw_serialize method can be used as well, but the above approach is preferred.
+  my $xml_data = $xml_raw_serializer->serialize($hash_ref);
+
 
 =head1 You want to convert data between two different serializers native formats
 
@@ -110,13 +123,15 @@ programs.
 
 =head2 Solution
 
-  my $xml_serializer = Data::Serializer->(serializer => 'XML::Dumper', raw => 1);
+  use Data::Serializer::Raw;
 
-  my $php_serializer = Data::Serializer->(serializer => 'PHP::Serialization', raw => 1);
+  my $xml_raw_serializer = Data::Serializer::Raw->(serializer => 'XML::Dumper');
 
-  my $hash_ref = $php_serializer->deserialize($php_data);
+  my $php_raw_serializer = Data::Serializer::Raw->(serializer => 'PHP::Serialization');
 
-  my $xml_data = $xml_serializer->serialize($hash_ref); 
+  my $hash_ref = $php_raw_serializer->deserialize($php_data);
+
+  my $xml_data = $xml_raw_serializer->serialize($hash_ref); 
 
 =head1  Keeping data persistent between executions of a program.
 
@@ -148,7 +163,7 @@ Neil Neely <F<neil@neely.cx>>.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2001-2008 Neil Neely.  All rights reserved.
+Copyright (c) 2001-2011 Neil Neely.  All rights reserved.
 
 This program is free software; you can redistribute it
 and/or modify it under the same terms as Perl itself.
@@ -159,6 +174,8 @@ and/or modify it under the same terms as Perl itself.
 =over 4
 
 =item  L<Data::Serializer(3)>
+
+=item  L<Data::Serializer::Raw(3)>
 
 =back
 

@@ -229,6 +229,42 @@ $testrefs{selfrefarray}->[3]   = $testrefs{selfrefarray}->[1];
                                                 complexhash  => $counts{complexhash},
                                                 selfrefhash  => $counts{selfrefhash},
                                            },
+                        'Bencode'  => {
+                                                simpleobject  => 0,	#Bencode does not support serializing objects
+                                                simplescalarref  => 0,	#Bencode does not support serializing saclar references
+                                                simplescalar  => $counts{simplescalar},
+                                                trickyscalar  => $counts{trickyscalar},
+                                                simplearray  => $counts{simplearray},
+                                                complexarray => $counts{complexarray},
+                                                selfrefarray  => $counts{selfrefarray},
+                                                simplehash   => $counts{simplehash},
+                                                complexhash  => $counts{complexhash},
+                                                selfrefhash  => $counts{selfrefhash},
+                                           },
+                        'Convert::Bencode'  => {
+                                                simpleobject  => 0,	#Convert::Bencode does not support serializing objects
+                                                simplescalarref  => 0,	#Convert::Bencode does not support serializing saclar references
+                                                simplescalar  => $counts{simplescalar},
+                                                trickyscalar  => $counts{trickyscalar},
+                                                simplearray  => $counts{simplearray},
+                                                complexarray => $counts{complexarray},
+                                                selfrefarray  => $counts{selfrefarray},
+                                                simplehash   => $counts{simplehash},
+                                                complexhash  => $counts{complexhash},
+                                                selfrefhash  => $counts{selfrefhash},
+                                           },
+                        'Convert::Bencode_XS'  => {
+                                                simpleobject  => 0,	#Convert::Bencode_XS does not support serializing objects
+                                                simplescalarref  => 0,	#Convert::Bencode_XS does not support serializing saclar references
+                                                simplescalar  => $counts{simplescalar},
+                                                trickyscalar  => $counts{trickyscalar},
+                                                simplearray  => $counts{simplearray},
+                                                complexarray => $counts{complexarray},
+                                                selfrefarray  => $counts{selfrefarray},
+                                                simplehash   => $counts{simplehash},
+                                                complexhash  => $counts{complexhash},
+                                                selfrefhash  => $counts{selfrefhash},
+                                           },
                   );
 
 %features = (

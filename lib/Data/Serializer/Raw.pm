@@ -182,10 +182,56 @@ nothing else is done. (no encoding, encryption, compression, etc)
 This is a straight pass through to the underlying serializer,
 nothing else is done. (no encoding, encryption, compression, etc)
 
+=item B<serializer> - change the serializer
+
+Currently supports the following serializers:
+
+=over 4
+
+=item L<Bencode(3)>
+
+=item L<Convert::Bencode(3)>
+
+=item L<Convert::Bencode_XS(3)>
+
+=item L<Config::General(3)>
+
+=item L<Data::Denter(3)>
+
+=item L<Data::Dumper(3)>
+
+=item L<Data::Taxi(3)>
+
+=item L<FreezeThaw(3)>
+
+=item L<JSON(3)>
+
+=item L<JSON::Syck(3)>
+
+=item L<PHP::Serialization(3)>
+
+=item L<Storable(3)>
+
+=item L<XML::Dumper(3)>
+
+=item L<XML::Simple(3)>
+
+=item L<YAML(3)>
+
+=item L<YAML::Syck(3)>
+
+=back
+
+Default is to use Data::Dumper.
+
+Each serializer has its own caveat's about usage especially when dealing with
+cyclical data structures or CODE references.  Please see the appropriate
+documentation in those modules for further information.
+
 
 =item B<options> - pass options through to underlying serializer
 
-Currently is only supported by Config::General, and XML::Dumper.
+Currently is only supported by L<Config::General(3)>, and L<XML::Dumper(3)>.
 
   my $obj = Data::Serializer::Raw->new(serializer => 'Config::General',
                                   options    => {
@@ -231,7 +277,7 @@ See http://www.perl.com/language/misc/Artistic.html
 
 =head1 ACKNOWLEDGEMENTS
 
-Peter Makholm took the time to profile Data::Serializer(3) and pointed out the value
+Peter Makholm took the time to profile L<Data::Serializer(3)> and pointed out the value
 of having a very lean implementation that minimized overhead and just used the raw underlying serializers.
 
 =head1 SEE ALSO

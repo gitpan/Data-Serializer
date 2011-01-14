@@ -17,13 +17,22 @@ name: Data-Serializer
 provides:
   Data::Serializer:
     file: lib/Data/Serializer.pm
-    version: 0.54
+    version: 0.55
+  Data::Serializer::Bencode:
+    file: lib/Data/Serializer/Bencode.pm
+    version: 0.03
   Data::Serializer::Config::General:
     file: lib/Data/Serializer/Config/General.pm
     version: 0.02
+  Data::Serializer::Convert::Bencode:
+    file: lib/Data/Serializer/Convert/Bencode.pm
+    version: 0.03
+  Data::Serializer::Convert::Bencode_XS:
+    file: lib/Data/Serializer/Convert/Bencode_XS.pm
+    version: 0.03
   Data::Serializer::Cookbook:
     file: lib/Data/Serializer/Cookbook.pm
-    version: 0.04
+    version: 0.05
   Data::Serializer::Data::Denter:
     file: lib/Data/Serializer/Data/Denter.pm
     version: 0.02
@@ -90,4 +99,4 @@ requires:
   IO::File: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.54
+version: 0.55
