@@ -20,6 +20,22 @@ foreach my $serializer (keys %serializers) {
 	}
 }
 
+#
+# XML::Simple has an internal dependency of either XML::SAX or XML::Parser, so we need to test for those
+# too, and if we don't find them, act like XML::Simple is not installed
+#
+if (grep {/^XML::Simple$/} @serializers) {
+        if (eval "require XML::SAX") {
+                $T->msg("Found XML::SAX to support XML::Simple");
+        } elsif (eval "require XML::Parser") {
+                $T->msg("Found XML::Parser to support XML::Simple");
+        } else {
+                $T->msg("Could not find XML::Parser or XML::SAX, removing XML::Simple") unless (@serializers);
+                @serializers = grep {!/^XML::Simple$/} @serializers;
+        }
+}
+
+
 
 $T->msg("No serializers found!!") unless (@serializers);
 

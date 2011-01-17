@@ -1,5 +1,10 @@
 Revision history for Perl extension Data::Serializer
 
+0.57  Mon Jan  17 2011
+	- Updated remainder of test suite to armor against XML::Simple dependency problems that I first 
+	  attempted to fix in 0.53.  Only modified tests, no change to module code
+		Thanks to the cpantesters automated reporting for finding this.
+
 0.56  Fri Jan  14 2011
 	- Moved store/retrieve internals to Data::Serializer::Persistent (internals only)
 	  This defers the inclusion of IO::File to happen only if store or retrieve is called
