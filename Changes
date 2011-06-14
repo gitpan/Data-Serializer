@@ -1,5 +1,10 @@
 Revision history for Perl extension Data::Serializer
 
+0.57  Tue Jun  14 2011
+	- Added utf8 to the decode in the JSON deserializing code.  Fixes https://rt.cpan.org/Public/Bug/Display.html?id=68125
+		Thanks to colink@perldreamer.com for finding the bug and supplying good tests and a suggested fix and to 
+		lp@sunnyspot.org for the suggested ->utf8-> fix (which really was functionally identical to what colink recommended)
+
 0.57  Mon Jan  17 2011
 	- Updated remainder of test suite to armor against XML::Simple dependency problems that I first 
 	  attempted to fix in 0.53.  Only modified tests, no change to module code

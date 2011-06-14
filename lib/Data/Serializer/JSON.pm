@@ -6,7 +6,7 @@ use strict;
 use JSON;
 use vars qw($VERSION @ISA);
 
-$VERSION = '0.03';
+$VERSION = '0.04';
 
 sub serialize {
 	return JSON->VERSION < 2 ? JSON->new->objToJson($_[1]) : JSON->new->utf8->encode($_[1]);
@@ -14,7 +14,7 @@ sub serialize {
 
 sub deserialize {
 	#return JSON->VERSION < 2 ? JSON->new->jsonToObj($_[1]) : JSON->new->decode($_[1]);
-	$_[1] and return JSON->VERSION < 2 ? JSON->new->jsonToObj($_[1]) : JSON->new->decode($_[1]);
+	$_[1] and return JSON->VERSION < 2 ? JSON->new->jsonToObj($_[1]) : JSON->new->utf8->decode($_[1]);
 }
 
 1;
