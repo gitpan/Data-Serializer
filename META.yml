@@ -17,7 +17,7 @@ name: Data-Serializer
 provides:
   Data::Serializer:
     file: lib/Data/Serializer.pm
-    version: 0.58
+    version: 0.59
   Data::Serializer::Bencode:
     file: lib/Data/Serializer/Bencode.pm
     version: 0.03
@@ -105,4 +105,4 @@ requires:
   IO::File: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.58
+version: 0.59
